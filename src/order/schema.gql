@@ -1,0 +1,73 @@
+# import Node, PageInfo, Edge, Operations from "../base/schema.gql"
+# import DocumentInput, Document, DocumentConnection from "../document/schema.gql"
+# import Item from "../item/schema.gql"
+# import Shop from "../shop/schema.gql"
+# import Vendor from "../vendor/schema.gql"
+# import User from "../user/schema.gql"
+
+type Order {
+  id: ID!
+  trackingNumber: String
+  items(
+    id: ID
+    search: ItemInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): ItemConnection!
+  accepted: Boolean!
+  shop: Shop!
+  vendor: Vendor!
+  creator: User!
+  acceptor: User!
+}
+
+input OrderInput {
+  trackingNumber: String
+  items: [ItemInput!]
+  accepted: Boolean
+  shop: ID
+  vendor: ID
+  creator: ID
+  acceptor: ID
+}
+
+type OrderEdge implements Edge {
+  node: Order
+  cursor: ID!
+}
+
+type OrderConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [OrderEdge]
+  totalCount: Int
+  orders: [Order]
+}
+
+extend type Query {
+  order(id: ID!): Order
+  orders(
+    ids: [ID!]
+    search: OrderInput!
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): OrderConnection
+  allOrders(first: Int, after: ID, last: Int, before: ID): OrderConnection
+}
+
+extend type Mutation {
+  order(order: OrderInput, operation: Operations = CREATE): Order
+  createOrder(order: OrderInput): ID!
+  createOrders(orders: [OrderInput!]): [Order]
+  deleteOrder(id: ID!): Order
+  deleteOrders(
+    search: OrderInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): OrderConnection
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://inventorymanager.com/schema/user.json",
+  "title": "User",
+  "description": "A user for the inventory manager",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "ID",
+      "$comment": "This is for Application storage since it has an set length.",
+      "description": "The unique identifier, useful for querying a single User."
+    },
+    "username": {
+      "title": "Username",
+      "description": "The username used for login to the Inventory Manager.",
+      "type": "string",
+      "minLength": 1
+    },
+    "passwordHash": {
+      "title": "Password Hash",
+      "desctiption": "This is an indication for the hash that is used to protect the users password.",
+      "type": "string",
+      "enum": [
+        "BCRYPT",
+        "ARGON2"
+      ]
+    },
+    "twoFactorAuthenticationType": {
+      "title": "Two Factor Authentication Type",
+      "desctiption": "This is the type of two factor authentication used by the user.",
+      "type": "string",
+      "enum": [
+        "NONE",
+        "TOTP",
+        "HOTP"
+      ]
+    },
+    "teams": {
+      "title": "Teams",
+      "desctiption": "These are the Teams that the user is on.",
+      "type": "array",
+      "items": {
+        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "title": "ID",
+        "$comment": "This is for Application storage since it has an set length.",
+        "description": "The unique identifier, useful for querying a single Team."
+      }
+    },
+    "name": {
+      "title": "Name",
+      "desctiption": "The Users name.",
+      "type": "string"
+    },
+    "email": {
+      "title": "Name",
+      "desctiption": "The Users name.",
+      "type": "string",
+      "pattern": "^([0-9a-zA-Z](?>[-.\\w]*[0-9a-zA-Z])*@(?>[0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$"
+    }
+  }
+}

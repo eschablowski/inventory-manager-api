@@ -1,0 +1,75 @@
+# import Node, PageInfo, Edge, Operations from "../base/schema.gql"
+
+"""
+A Document describing an item, product, or order, as well as templates.
+The uses for this are very extensive.
+"""
+type Document {
+  """
+  The unique ID of the document, is a UUID.
+  """
+  id: ID!
+  name: String!
+  filename: String!
+  mime: String!
+  version: String!
+  template: Template!
+  url: String!
+  data: String!
+  renderedUrl: String!
+  renderedData: String!
+}
+
+input DocumentInput {
+  id: ID!
+  name: String!
+  filename: String!
+  mime: String!
+  version: String!
+  template: Template!
+  data: String!
+}
+
+enum Template {
+  NONE
+  NUNJUCKS
+}
+
+type DocumentEdge implements Edge {
+  node: Document
+  cursor: ID!
+}
+
+type DocumentConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [DocumentEdge]
+  totalCount: Int
+  documents: [Document]
+}
+
+extend type Query {
+  getDocument(id: ID): Document
+  getDocuments(
+    id: [ID!]
+    search: DocumentInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): DocumentConnection
+  allDocuments(first: Int, after: ID, last: Int, before: ID): DocumentConnection
+}
+
+extend type Mutation {
+  document(document: DocumentInput, operation: Operations = CREATE): Document
+  createDocument(document: DocumentInput): ID!
+  createDocuments(documents: [DocumentInput]): [Document]
+  deleteDocument(id: ID!): Document
+  deleteDocuments(
+    search: DocumentInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): DocumentConnection
+}

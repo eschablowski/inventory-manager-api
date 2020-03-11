@@ -1,0 +1,55 @@
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+  startCursor: ID!
+  endCursor: ID!
+}
+
+interface Edge {
+  node: Node!
+  cursor: ID!
+}
+
+interface Connection {
+  pageInfo: PageInfo!
+  edges: [Edge]
+  totalCount: Int
+}
+
+enum Operations {
+  CREATE
+  MERGE
+  UPDATE
+  DELETE
+  REMOVE
+}
+
+
+enum SearchTypes {
+  EXACT
+  FULLTEXT
+  FUZZY
+  WILDCARD
+}
+
+enum SearchOperators {
+  AND
+  OR
+  NOT
+}
+
+type SearchParam {
+  value: String!
+  type: SearchTypes!
+}
+
+type SearchOpt {
+  values: [SearchParam!]
+  type: SearchOperators
+}
+
+union Search = SearchOpt | SearchParam | String

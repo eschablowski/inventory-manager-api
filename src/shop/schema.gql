@@ -1,0 +1,61 @@
+# import Node, PageInfo, Edge, Operations from "../base/schema.gql"
+# import Team from "../Team/schema.gql"
+# import Vendor from "../vendor/schema.gql"
+# import User from "../user/schema.gql"
+# import AddOn from "../base/schema.gql"
+# import Workflow from "../workflow/schema.gql"
+
+type Shop {
+  id: ID
+  name: String
+  emailServer: String
+  teams(first: Int, after: ID, last: Int, before: ID): TeamConnection
+  workflows(first: Int, after: ID, last: Int, before: ID): WorkflowConnection
+  vendors: VendorConnection
+  addOns(first: Int, after: ID, last: Int, before: ID): User
+}
+
+input ShopInput {
+  name: String
+  emailServer: String
+  teams: [ID!]
+}
+
+type ShopEdge implements Edge {
+  node: Shop
+  cursor: ID
+}
+
+type ShopConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [ShopEdge]
+  totalCount: Int
+  shops: [Shop]
+}
+
+extend type Query {
+  shop(id: ID!): Shop
+  shops(
+    ids: [ID!]
+    search: ShopInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): ShopConnection
+  allShops(first: Int, after: ID, last: Int, before: ID): ShopConnection
+}
+
+extend type Mutation {
+  shop(shop: ShopInput, operation: Operations = CREATE): Shop
+  createShop(shop: Shop): Shop
+  createShops(products: [ShopInput!]): [Shop]
+  deleteShop(id: ID!): Order
+  deleteShops(
+    search: ShopInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): ShopConnection
+}

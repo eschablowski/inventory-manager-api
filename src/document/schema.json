@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://inventorymanager.com/schema/document.json",
+  "title": "Document",
+  "description": "A document in the inventory manager",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "ID",
+      "$comment": "This is not for display purposes, but should be used for application level distinction due to it being garanteed to be unique.",
+      "description": "The unique identifier, useful for querying a single Document."
+    },
+    "name": {
+      "title": "Document Name",
+      "description": "The name of the document.",
+      "type": "string",
+      "minLength": 1
+    },
+    "filename": {
+      "title": "Filename",
+      "description": "The filename of the document.",
+      "type": "string",
+      "minLength": 1
+    },
+    "mime": {
+      "title": "MIME Type",
+      "description": "The MIME Type of the document.",
+      "type": "string",
+      "minLength": 3,
+      "pattern": "\\w+\\/[\\w+-]+"
+    },
+    "template": {
+      "title": "Template Engine",
+      "description": "The Templating Engine used to render this document.",
+      "type": "string",
+      "enum": [
+        "NONE",
+        "NUNJUCKS"
+      ]
+    },
+    "url": {
+      "title": "Download URL",
+      "description": "The URL to download the unrenered document.",
+      "type": "string",
+      "minLength": 5,
+      "readOnly": true
+    },
+    "renderedUrl": {
+      "title": "Download Rendered URL",
+      "description": "The URL to download the renered document.",
+      "type": "string",
+      "minLength": 5,
+      "readOnly": true
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://inventorymanager.com/schema/product.json",
+  "title": "Product",
+  "description": "A product in the inventory manager",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "ID",
+      "$comment": "This is for Application storage since it has an set length.",
+      "description": "The unique identifier, useful for querying a single User."
+    },
+    "trackingNumber": {
+      "title": "Tracking Number",
+      "description": "The tracking number for this Orders package.",
+      "type": "string",
+      "minLength": 0
+    },
+    "products": {
+      "title": "Items",
+      "description": "The products in this order.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+            "title": "Product ID",
+            "$comment": "This is for Application storage since it has an set length.",
+            "description": "The unique identifier, useful for querying a single Product."
+          },
+          "amount": {
+            "title": "Product Amount",
+            "description": "The amount of this product in the order.",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "amount"
+        ]
+      }
+    },
+    "accepted": {
+      "title": "Accepted",
+      "description": "Specifies whether this order was accepted, AKA, completed.",
+      "type": "boolean"
+    },
+    "shop": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "Shop ID",
+      "$comment": "This is for Application storage since it has an set length.",
+      "description": "The unique identifier of the Shop that ordered this order.",
+      "readOnly": false
+    },
+    "vendor": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "Vendor ID",
+      "$comment": "This is for Application storage since it has an set length.",
+      "description": "The unique identifier of the Shop that ordered this order.",
+      "readOnly": false
+    },
+    "creator": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "Creator ID",
+      "$comment": "This is for Application storage since it has an set length.",
+      "description": "The unique identifier of the User that ordered this order.",
+      "readOnly": false
+    },
+    "acceptor": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "Acceptor ID",
+      "$comment": "This is for Application storage since it has an set length.",
+      "description": "The unique identifier of the User that accepted this order.",
+      "readOnly": false
+    }
+  }
+}

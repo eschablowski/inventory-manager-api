@@ -1,0 +1,68 @@
+type User {
+  id: ID!
+  username: String
+  passwordHash: Hashes
+  twoFactorAuthenticationType: TwoFactorAuthenticators
+  teams(first: Int, after: ID, last: Int, before: ID): TeamConnection
+  name: String
+  email: String
+}
+
+input UserInput {
+  username: String!
+  password: String!
+  teams: [ID!]
+  name: String
+  email: String
+  shop: ID!
+}
+
+enum Hashes {
+  BCRYPT
+  ARGON2
+}
+
+enum TwoFactorAuthenticators {
+  NONE
+  TOTP
+  HOTP
+}
+
+type UserEdge implements Edge {
+  node: User
+  cursor: ID
+}
+
+type UserConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]
+  totalCount: Int
+  users: [User]
+}
+
+extend type Query {
+  user(id: ID!): User
+  users(
+    ids: [ID!]
+    search: UserInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): UserConnection
+  allUsers(first: Int, after: ID, last: Int, before: ID): UserConnection
+}
+
+extend type Mutation {
+  user(user: UserInput, operation: Operations = CREATE): User
+  createUser(user: UserInput): User
+  createUsers(user: [UserInput!]): [User]
+  deleteUser(id: ID!): User
+  deleteUsers(
+    search: UserInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): UserConnection
+}

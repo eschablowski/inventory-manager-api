@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "removeComments": false,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
+    "module": "commonjs",
+    "target": "ES2015",
+    "experimentalDecorators": true,
+    "sourceMap": false,
+    "declaration": true,
+    "noResolve": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}

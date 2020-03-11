@@ -1,0 +1,51 @@
+type Team {
+  id: ID
+  name: String
+  users(first: Int, after: ID, last: Int, before: ID): UserConnection
+  shop: Shop
+}
+
+input TeamInput {
+  name: String
+  users: [ID!]
+  shop: ID
+}
+
+type TeamEdge implements Edge {
+  node: Team
+  cursor: ID
+}
+
+type TeamConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [TeamEdge]
+  totalCount: Int
+  teams: [Team]
+}
+
+extend type Query {
+  team(id: ID!): Team
+  teams(
+    ids: [ID!]
+    search: TeamInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): TeamConnection
+  allTeams(first: Int, after: ID, last: Int, before: ID): TeamConnection
+}
+
+extend type Mutation {
+  team(team: TeamInput, operation: Operations = CREATE): Team
+  createTeam(team: TeamInput): Team
+  createTeams(teams: [TeamInput!]): [Team]
+  deleteTeam(id: ID!): Team
+  deleteTeams(
+    search: TeamInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): TeamConnection
+}

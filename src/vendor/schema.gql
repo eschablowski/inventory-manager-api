@@ -1,0 +1,59 @@
+# import Order from "../order/schema.gql"
+type Vendor {
+  id: ID
+  name: String
+  shop: Shop
+  orders(first: Int, after: ID, last: Int, before: ID): OrderConnection
+  orderWorkflow: Workflow
+}
+
+type Product {
+  id: ID
+  amount: Float
+}
+
+input VendorInput {
+  name: String
+  shop: ID
+  orders: [ID!]
+  orderWorkflow: ID
+}
+
+type VendorEdge implements Edge {
+  node: Vendor
+  cursor: ID
+}
+
+type VendorConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [VendorEdge]
+  totalCount: Int
+  users: [Vendor]
+}
+
+extend type Query {
+  vendor(id: ID!): Vendor
+  vendors(
+    ids: [ID!]
+    search: VendorInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): VendorConnection
+  allVendors(first: Int, after: ID, last: Int, before: ID): VendorConnection
+}
+
+extend type Mutation {
+  vendor(vendor: VendorInput, operation: Operations = CREATE): Vendor
+  createVendor(vendor: VendorInput): Vendor
+  createVendors(vendors: [VendorInput!]): [Vendor]
+  deleteVendor(id: ID!): Vendor
+  deleteVendors(
+    search: VendorInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): VendorConnection
+}

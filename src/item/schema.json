@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://inventorymanager.com/schema/item.json",
+  "title": "Item",
+  "description": "An item in the inventory manager",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "ID",
+      "$comment": "This is not for display purposes, but should be used for application level distinction due to it being garanteed to be unique.",
+      "description": "The unique identifier, useful for querying a single item."
+    },
+    "name": {
+      "title": "Serial Number",
+      "description": "The serial number of this item.",
+      "type": "string",
+      "minLength": 0
+    },
+    "used": {
+      "title": "Used",
+      "description": "Whether this item was used to make other parts or thrown away.",
+      "type": "boolean"
+    },
+    "stage": {
+      "title": "Production Stage",
+      "description": "The Stage of Production that this item is currently in.",
+      "type": "string",
+      "enum": [
+        "ORDER",
+        "STOCK",
+        "USED",
+        "PRODUCTION"
+      ]
+    },
+    "documents": {
+      "title": "Documents",
+      "description": "The Documents associated with this item.",
+      "type": "array",
+      "items": {
+        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "title": "ID",
+        "$comment": "This is not for display purposes, but should be used for application level distinction due to it being garanteed to be unique.",
+        "description": "The unique identifier, useful for querying a single Document"
+      }
+    }
+  }
+}

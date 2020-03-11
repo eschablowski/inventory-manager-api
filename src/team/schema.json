@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://inventorymanager.com/schema/team.json",
+  "title": "User",
+  "description": "A team of users in the inventory manager",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "ID",
+      "$comment": "This is not for display purposes, but should be used for application level distinction due to it being garanteed to be unique.",
+      "description": "The unique identifier, useful for querying a single Team."
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "The name given to this Team.",
+      "$comment": "This is for Display Purposes only, not recommened to searching, querying, modifying, etc. since this property is NOT garanteed to be unique",
+      "contentEncoding": "utf-8"
+    },
+    "shop": {
+      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "title": "ID",
+      "description": "The unique identifier for the Shop that the Team Belongs to."
+    },
+    "users": {
+      "type": "array",
+      "items": {
+        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "title": "ID",
+        "description": "The unique identifier for the Users in this Team."
+      }
+    }
+  }
+}

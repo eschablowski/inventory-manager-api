@@ -1,0 +1,12 @@
+# import Query, Mutation from "user/schema.gql"
+# import Query from "team/schema.gql"
+# import Query from "shop/schema.gql"
+
+type Query {
+  verison: String! @cacheControl(maxAge: 3600)
+  server: String! @cacheControl(maxAge: 0)
+}
+
+schema {
+  query: Query
+}

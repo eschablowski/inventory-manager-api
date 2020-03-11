@@ -1,0 +1,46 @@
+type Workflow {
+  id: ID!
+}
+
+input WorkflowInput {
+  name: String
+}
+
+type WorkflowEdge implements Edge {
+  node: Workflow
+  cursor: ID
+}
+
+type WorkflowConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [WorkflowEdge]
+  totalCount: Int
+  users: [Workflow]
+}
+
+extend type Query {
+  workflow(id: ID!): Workflow
+  workflow(
+    ids: [ID!]
+    search: WorkflowInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): WorkflowConnection
+  allWorkflows(first: Int, after: ID, last: Int, before: ID): WorkflowConnection
+}
+
+extend type Mutation {
+  workflow(workflow: WorkflowInput, operation: Operations = CREATE): Workflow
+  createWorkflow(workflow: WorkflowInput): Workflow
+  createWorkflows(workflows: [WorkflowInput!]): [Workflow]
+  deleteWorkflow(id: ID!): Workflow
+  deleteWorkflows(
+    search: WorkflowInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): WorkflowConnection
+}

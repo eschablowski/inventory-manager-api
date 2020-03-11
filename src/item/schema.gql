@@ -1,0 +1,58 @@
+# import Node, PageInfo, Edge, Operations from "../base/schema.gql"
+# import DocumentInput, Document, DocumentConnection from "../document/schema.gql"
+
+type Item {
+  id: ID!
+  serialNumber: String!
+  used: Boolean!
+  stage: Stage!
+  amount: Float!
+  documents(
+    id: ID
+    search: ItemInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): DocumentConnection
+}
+
+input ItemInput {
+  serialNumber: String
+  used: Boolean
+  stage: Stage
+  documents: [DocumentInput!]
+}
+
+enum Stage {
+  ORDER
+  STOCK
+  USED
+  PRODUCTION
+}
+
+type ItemEdge implements Edge {
+  node: Item
+  cursor: ID!
+}
+
+type ItemConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [ItemEdge]
+  totalCount: Int
+  items: [Item]
+}
+
+extend type Query {
+  item(id: ID!): Item
+  items(search: ItemInput!, first: Int, after: ID, last: Int, before: ID): ItemConnection
+  allItems(first: Int, after: ID, last: Int, before: ID): ItemConnection
+}
+
+extend type Mutation {
+  item(item: ItemInput, operation: Operations = CREATE): Item
+  createItem(item: ItemInput): ID
+  createItems(items: [ItemInput!]): [Item]
+  deleteItem(id: ID!): Item
+  deleteItems(search: ItemInput, first: Int, after: ID, last: Int, before: ID): ItemConnection
+}

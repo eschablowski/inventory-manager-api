@@ -1,0 +1,95 @@
+# import Node, PageInfo, Edge, Operations from "../base/schema.gql"
+# import DocumentInput, Document, DocumentConnection from "../document/schema.gql"
+# import ItemInput, ItemConnection from "../product/schema.gql"
+# import Shop from "../shop/schema.gql"
+# import Vendor from "../vendor/schema.gql"
+# import User from "../user/schema.gql"
+
+type Product {
+  id: ID
+  sku: String
+  minQuantity: Quantity
+  quantity: Quantity
+  highQuantity: Quantity
+  dependencies(
+    ids: [ID!]
+    search: ProductInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): DependencyConnection
+  shop: Shop
+  vendor: Vendor
+}
+
+type Quantity {
+  order: Float!
+  stock: Float!
+  production: Float!
+}
+
+type Dependency {
+  id: ID!
+  amount: Float!
+}
+
+type DependencyEdge implements Edge {
+  node: Dependency
+  cursor: ID
+}
+
+type DependencyConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [DependencyEdge]
+  totalCount: Int
+  dependencies: [Dependency]
+}
+
+input ProductInput {
+  sku: String
+  minQuantity: Quantity
+  quantity: Quantity
+  highQuantity: Quantity
+  dependencies: [Dependency!]
+  vendor: ID
+}
+
+type ProductEdge implements Edge {
+  node: Product
+  cursor: ID
+}
+
+type ProductConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [ProductEdge]
+  totalCount: Int
+  products: [Product]
+}
+
+extend type Query {
+  product(id: ID!): Product
+  products(
+    ids: [ID!]
+    search: ProductInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): ProductConnection
+  allProducts(first: Int, after: ID, last: Int, before: ID): ProductConnection
+}
+
+extend type Mutation {
+  product(product: ProductInput, operation: Operations = CREATE): Product
+  createProduct(product: OrderInput): Product
+  createProducts(products: [ProductInput!]): [Product]
+  deleteProduct(id: ID!): Order
+  deleteProducts(
+    search: ProductInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): ProductConnection
+}
