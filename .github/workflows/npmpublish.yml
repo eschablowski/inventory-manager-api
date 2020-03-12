@@ -8,7 +8,6 @@ on:
     types: [created]
 
 jobs:
-
   publish-gpr:
     runs-on: ubuntu-latest
     steps:
@@ -22,3 +21,15 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - run: tar -c tar cf ../tarball.tar .
+      - name: Upload a Release Asset
+        uses: actions/upload-release-asset@v1.0.2
+        with:
+          # The URL for uploading assets to the release
+          upload_url: https://uploads.github.com/repos/${{GITHUB_WORKSPACE}}/releases/${{GITHUB_REF}}/assets
+          # The path to the asset you want to upload
+          asset_path: ../tarball.tar
+          # The name of the asset you want to upload
+          asset_name: package.tar
+          # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
+          asset_content_type: application/x-tar
