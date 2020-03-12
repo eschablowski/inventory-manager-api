@@ -6,6 +6,18 @@ interface Node {
   id: ID! @cacheControl(maxAge: 3600, scope: PUBLIC)
 }
 
+type NodeEdge implements Edge {
+  node: Node
+  cursor: ID
+}
+
+type NodeConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [NodeEdge]
+  totalCount: Int!
+  nodes: [Node]
+}
+
 type PageInfo {
   hasPreviousPage: Boolean! @cacheControl(maxAge: 0, scope: PRIVATE)
   hasNextPage: Boolean!  @cacheControl(maxAge: 0, scope: PRIVATE)
@@ -57,7 +69,7 @@ type SearchOpt {
   type: SearchOperators
 }
 
-union Search = SearchOpt | SearchParam | String
+union Search = SearchOpt | SearchParam
 
 extend type Query {
   node(id: ID!): Node
