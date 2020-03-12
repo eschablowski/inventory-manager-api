@@ -6,7 +6,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "$ref": "../base/schema.json#/definitions/uuid",
       "title": "ID",
       "$comment": "This is for Application storage since it has an set length.",
       "description": "The unique identifier, useful for querying a single Shop."
@@ -28,7 +28,7 @@
       "desctiption": "These are the Teams that the user is on.",
       "type": "array",
       "items": {
-        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "$ref": "../base/schema.json#/definitions/uuid",
         "title": "ID",
         "$comment": "This is for Application storage since it has an set length.",
         "description": "The unique identifier, useful for querying a single Team."
@@ -39,7 +39,7 @@
       "desctiption": "These are the Workflows that the Shop has.",
       "type": "array",
       "items": {
-        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "$ref": "../base/schema.json#/definitions/uuid",
         "title": "ID",
         "$comment": "This is for Application storage since it has an set length.",
         "description": "The unique identifier, useful for querying a single Workflow."
@@ -50,7 +50,7 @@
       "desctiption": "These are the Vendors that the Shop has.",
       "type": "array",
       "items": {
-        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "$ref": "../base/schema.json#/definitions/uuid",
         "title": "ID",
         "$comment": "This is for Application storage since it has an set length.",
         "description": "The unique identifier, useful for querying a single Vendor."
@@ -61,7 +61,7 @@
       "desctiption": "These are the Add Ons that the Shop has.",
       "type": "array",
       "items": {
-        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "$ref": "../base/schema.json#/definitions/uuid",
         "title": "ID",
         "$comment": "This is for Application storage since it has an set length.",
         "description": "The unique identifier, useful for querying a single Licence."

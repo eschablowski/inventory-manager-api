@@ -1,23 +1,27 @@
+"""
+A node instance is basically an instance of data.
+This is useful for showing that every storage item has a unique identifier
+"""
 interface Node {
-  id: ID!
+  id: ID! @cacheControl(maxAge: 3600, scope: PUBLIC)
 }
 
 type PageInfo {
-  hasPreviousPage: Boolean!
-  hasNextPage: Boolean!
-  startCursor: ID!
-  endCursor: ID!
+  hasPreviousPage: Boolean! @cacheControl(maxAge: 0, scope: PRIVATE)
+  hasNextPage: Boolean!  @cacheControl(maxAge: 0, scope: PRIVATE)
+  startCursor: ID!  @cacheControl(maxAge: 0, scope: PRIVATE)
+  endCursor: ID!  @cacheControl(maxAge: 0, scope: PRIVATE)
 }
 
 interface Edge {
   node: Node!
-  cursor: ID!
+  cursor: ID!  @cacheControl(maxAge: 30, scope: PUBLIC)
 }
 
 interface Connection {
   pageInfo: PageInfo!
   edges: [Edge]
-  totalCount: Int
+  totalCount: Int @cacheControl(maxAge: 30, scope: PUBLIC)
 }
 
 enum Operations {
@@ -34,6 +38,7 @@ enum SearchTypes {
   FULLTEXT
   FUZZY
   WILDCARD
+  SQL
 }
 
 enum SearchOperators {
@@ -53,3 +58,18 @@ type SearchOpt {
 }
 
 union Search = SearchOpt | SearchParam | String
+
+extend type Query {
+  node(id: ID!): Node
+  nodes(ids: [ID!], search: Search, first: Int, after: ID, last: Int, before: ID): NodeConnection
+}
+
+extend type Mutation {
+  node(node: Node): Node
+  nodes(nodes: [Node]): Node
+}
+
+extend type Subscription {
+  node(id: ID!): Node
+  nodes(ids: [ID!], search: Search, first: Int, after: ID, last: Int, before: ID): NodeConnection
+}

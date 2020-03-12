@@ -31,7 +31,7 @@
   },
   "properties": {
     "id": {
-      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "$ref": "../base/schema.json#/definitions/uuid",
       "title": "ID",
       "$comment": "This is for Application storage since it has an set length.",
       "description": "The unique identifier, useful for querying a single Product."
@@ -65,7 +65,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+            "$ref": "../base/schema.json#/definitions/uuid",
             "title": "Product ID",
             "$comment": "This is for Application storage since it has an set length.",
             "description": "The unique identifier, useful for querying a single Product."

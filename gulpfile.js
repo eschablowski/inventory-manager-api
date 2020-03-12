@@ -1,9 +1,12 @@
 const path = require("path");
-const { src, dest, parallel } = require("gulp");
+const { src, dest, parallel, series, watch } = require("gulp");
 const gulpTs = require("gulp-typescript");
 const rename = require("gulp-rename");
+const gulpMerge = require("gulp-merge");
 const source = require("vinyl-source-stream");
 const { importSchema } = require("graphql-import");
+
+const jsonSchemaBundle = require("./gulp.json-bundle");
 
 async function graphql() {
   const stream = source("schema.gql");
@@ -18,6 +21,8 @@ async function graphql() {
 
 function json() {
   return src("src/*/schema.json")
+    .pipe(jsonSchemaBundle())
+    .pipe(dest("build/js"))
     .pipe(
       rename(p => {
         p.basename = p.dirname;
@@ -35,11 +40,23 @@ function ts() {
     sourcemaps: true
   })
     .pipe(tsProject())
-    .pipe(dest("build/js", { sourcemaps: true }));
+    .pipe(dest("build/js"));
 }
 
-exports.ts = ts;
+exports.ts = series(json, ts);
+exports.watchTs = () =>
+  watch(["src/**/.ts", "tsconfig.json", "package.json"], ts);
+
 exports.json = json;
+exports.watchJson = () => watch(["src/**/.json"], json);
+
 exports.graphql = graphql;
 exports.gql = graphql;
-exports.default = parallel(graphql, json, ts);
+exports.watchGraphQL = () => watch(["src/**/.gql", "src/**/.graphql"], graphql);
+
+exports.watch = parallel(
+  exports.watchGraphQL,
+  exports.watchJson,
+  exports.watchTs
+);
+exports.default = parallel(graphql, json, exports.ts);

@@ -6,7 +6,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "$ref": "../base/schema.json#/definitions/uuid",
       "title": "ID",
       "$comment": "This is for Application storage since it has an set length.",
       "description": "The unique identifier, useful for querying a single User."
@@ -18,7 +18,7 @@
       "minLength": 1
     },
     "shop": {
-      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "$ref": "../base/schema.json#/definitions/uuid",
       "title": "Shop ID",
       "$comment": "This is for Application storage since it has an set length.",
       "description": "The unique identifier of the Shop that ordered this order.",
@@ -29,7 +29,7 @@
       "description": "The orders fulfilled by this vendor.",
       "type": "array",
       "items": {
-        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "$ref": "../base/schema.json#/definitions/uuid",
         "title": "Order ID",
         "$comment": "This is for Application storage since it has an set length.",
         "description": "The unique identifier, useful for querying a single Order.",
@@ -37,7 +37,7 @@
       }
     },
     "orderWorkflow": {
-      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "$ref": "../base/schema.json#/definitions/uuid",
       "title": "Order Workflow ID",
       "$comment": "This is for Application storage since it has an set length.",
       "description": "The unique identifier of the Workflow used to order from this vendor.",

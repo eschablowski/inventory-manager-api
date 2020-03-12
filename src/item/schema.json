@@ -6,7 +6,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+      "$ref": "../base/schema.json#/definitions/uuid",
       "title": "ID",
       "$comment": "This is not for display purposes, but should be used for application level distinction due to it being garanteed to be unique.",
       "description": "The unique identifier, useful for querying a single item."
@@ -38,7 +38,7 @@
       "description": "The Documents associated with this item.",
       "type": "array",
       "items": {
-        "$ref": "https://inventorymanager.com/schema/base.json#/definitions/uuid",
+        "$ref": "../base/schema.json#/definitions/uuid",
         "title": "ID",
         "$comment": "This is not for display purposes, but should be used for application level distinction due to it being garanteed to be unique.",
         "description": "The unique identifier, useful for querying a single Document"

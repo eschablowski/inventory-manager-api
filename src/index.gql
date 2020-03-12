@@ -1,12 +1,26 @@
-# import Query, Mutation from "user/schema.gql"
-# import Query from "team/schema.gql"
-# import Query from "shop/schema.gql"
+# import Query, Subscription from "base/schema.gql"
+# import Query, Mutation, Subscription from "document/schema.gql"
+# import Query, Mutation, Subscription from "item/schema.gql"
+# import Query, Mutation, Subscription from "order/schema.gql"
+# import Query, Mutation, Subscription from "product/schema.gql"
+# import Query, Mutation, Subscription from "shop/schema.gql"
+# import Query, Mutation, Subscription from "team/schema.gql"
+# import Query, Mutation, Subscription from "user/schema.gql"
+# import Query, Mutation, Subscription from "vendor/schema.gql"
+# import Query, Mutation, Subscription from "workflow/schema.gql"
 
 type Query {
   verison: String! @cacheControl(maxAge: 3600)
   server: String! @cacheControl(maxAge: 0)
 }
 
+type Subscription {
+  version: String! @cacheControl(maxAge: 3600)
+  server: String! @cacheControl(maxAge: 0, scope: PRIVATE)
+}
+
 schema {
   query: Query
+  mutation: Mutation,
+  subscription: Subscription
 }
