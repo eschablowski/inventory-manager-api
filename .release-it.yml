@@ -5,6 +5,6 @@ github:
   release: true
   releaseName: "Release ${version}"
   tokenRef: "GITHUB_TOKEN"
-  assets: "dist/*.tgz"
+  assets: "dist/*"
 hooks:
   "before:release": npm run-script build
