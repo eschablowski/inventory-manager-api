@@ -62,7 +62,7 @@ function packageJson() {
     .pipe(
       jsonEditor(json => {
         delete json.devDependencies;
-        json.private = true;
+        json.private = false;
         return json;
       })
     )
