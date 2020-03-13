@@ -1,6 +1,6 @@
 {
   "name": "@eschablowski/inventory-manager-api",
-  "version": "0.0.1-pre-alpha",
+  "version": "0.0.1",
   "description": "Types for the Inventory Management Software",
   "main": "build/js/index.js",
   "types": "build/js/index.d.ts",
