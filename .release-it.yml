@@ -7,4 +7,4 @@ github:
   tokenRef: "GITHUB_TOKEN"
   assets: "dist/*.tgz"
 hooks:
-  "before:release": npm build
+  "before:release": npm run-script build
