@@ -6,18 +6,52 @@ The uses for this are very extensive.
 """
 type Document {
   """
-  The unique ID of the document, is a UUID.
+  The unique ID of the document.
   """
-  id: ID!
-  name: String!
-  filename: String!
-  mime: String!
-  version: String!
-  template: Template!
-  url: String!
-  data: String!
-  renderedUrl: String!
-  renderedData: String!
+  id: ID
+  """
+  The name displayed to the user, useful for more information as well as nicer names.
+  """
+  name: String
+  """
+  The filename of this document, used for determining download links, etc.
+  """
+  filename: String
+  """
+  The MIME type of the document.
+  Useful for interpreting documents, showing them in browsers, as well as tracking viruses.
+  See https://www.iana.org/assignments/media-types/media-types.xhtml for more information as well as possible values.
+  """
+  mime: String
+  """
+  The version of this document, useful to manage iterations of documentation.
+  All versions are stored so that previous versions can still be accesed if the need arises.
+  """
+  version: String
+  """
+  The template engine this relies on, useful for generating documents, emails and other things dynamically fro m a single source.
+  """
+  template: Template
+  """
+  A URL to download the data from.
+  Useful to show links or comncurrently download documents rather than having them encoded in the message.
+  """
+  url: String
+  """
+  The raw data stored in this document.
+  This property should be used with care since the maximum limit for documents is currently 4GB, and only expected to grow.
+  """
+  data: String
+  """
+  A URL to download the rendered document from.
+  Useful to show links or comncurrently download documents rather than having them encoded in the message.
+  """
+  renderedUrl: String
+  """
+  The rendered data stored in this document.
+  This property should be used with care since the maximum limit for documents is currently 4GB (without rendering), and only expected to grow.
+  """
+  renderedData: String
 }
 
 input DocumentInput {

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://inventorymanager.com/schema/user.json",
+  "$id": "{{host}}/user.json",
   "title": "User",
   "description": "A user for the inventory manager",
   "type": "object",

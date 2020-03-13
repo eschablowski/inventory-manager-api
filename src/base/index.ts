@@ -1,2 +1,1 @@
-export * from "./type";
-export * as schema from "./schema.json";
+export type UUID = string;

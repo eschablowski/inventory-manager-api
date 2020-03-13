@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
-  "$id": "https://inventorymanager.com/schema/team.json",
+  "$id": "{{host}}/team.json",
   "title": "User",
   "description": "A team of users in the inventory manager",
   "type": "object",

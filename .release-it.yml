@@ -1,0 +1,10 @@
+npm:
+  publishPath: build
+
+github:
+  release: true
+  releaseName: "Release ${version}"
+  tokenRef: "GITHUB_TOKEN"
+  assets: "dist/*.tgz"
+hooks:
+  "before:release": npm build

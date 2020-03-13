@@ -3,85 +3,256 @@ A node instance is basically an instance of data.
 This is useful for showing that every storage item has a unique identifier
 """
 interface Node {
+  """
+  The unique identifier for this storage item.
+  Comprised of base64 encoding [type]:[id]
+
+  Useful for application level storage, but useless to any user.
+  """
   id: ID! @cacheControl(maxAge: 3600, scope: PUBLIC)
 }
 
+
+"""
+A Node Edge, namely the id and the actual sto
+
+Useful for pagination
+"""
 type NodeEdge implements Edge {
+  """
+  The Node at the end of the edge
+  """
   node: Node
+  """
+  A cursor for use in pagination
+  """
   cursor: ID
 }
 
+"""
+A connection to a list of Nodes.
+
+Useful for pagination.
+"""
 type NodeConnection implements Connection {
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
+  """
+  A list of Node Edges
+  """
   edges: [NodeEdge]
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the argument to "first", then fetch the total count so it could display "5 of 83", for example.
+  """
   totalCount: Int!
+  """
+  A list of all the objects retunes in the connection.
+  This is a convinience fild provided if edge data is not required.
+
+  Any Production environment should NOT use this.
+  """
   nodes: [Node]
 }
 
+"""
+Information about pagination in a connection.
+"""
 type PageInfo {
+  """
+  When pagionating forwards are there more items?
+  In other words, is this the end?
+  """
   hasPreviousPage: Boolean! @cacheControl(maxAge: 0, scope: PRIVATE)
+  """
+  When paginating backwards, are there more items?
+  In other words, is this the begining?
+  """
   hasNextPage: Boolean!  @cacheControl(maxAge: 0, scope: PRIVATE)
+  """
+  When paginating backwards, the cursor to continue.
+  """
   startCursor: ID!  @cacheControl(maxAge: 0, scope: PRIVATE)
+  """
+  When paginating forwards, the cursor to continue.
+  """
   endCursor: ID!  @cacheControl(maxAge: 0, scope: PRIVATE)
 }
 
+
+"""
+An edge in a connection.
+"""
 interface Edge {
+  """
+  The Node at the end of the edge
+  """
   node: Node!
+  """
+  A cursor for use in pagination
+  """
   cursor: ID!  @cacheControl(maxAge: 30, scope: PUBLIC)
 }
 
+"""
+A connection to a list of items.
+"""
 interface Connection {
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
   edges: [Edge]
-  totalCount: Int @cacheControl(maxAge: 30, scope: PUBLIC)
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+  This allows a client to fetch the first five objects by passing "5" as the argument to "first", then fetch the total count so it could display "5 of 83", for example.
+  """
+  totalCount: Int!
 }
 
+
+"""
+Mutation operations supported.
+
+Useful for shorter, more modular mutations.
+"""
 enum Operations {
+  """
+  Creates an instance if it does not exist.
+  """
   CREATE
+  """
+  Merges an existing instance with the provided
+  """
   MERGE
+  """
+  Overwrites all values with the provided ones, exept ID.
+  """
   UPDATE
+  """
+  Deletes the specified instances.
+  """
   DELETE
-  REMOVE
 }
 
-
+"""
+Specifies how the query string should be interpreted. 
+"""
 enum SearchTypes {
+  """
+  An exact match.
+  """
   EXACT
+  """
+  Performs a full text search.
+  """
   FULLTEXT
+  """
+  Performs a fuzzy search with the provided query.
+  """
   FUZZY
+  """
+  Performs a wildcard search.
+
+  * matches zero or more charachters.
+  ? matches any charachter.
+  """
   WILDCARD
-  SQL
+  """
+  Interprets the string as a regex.
+
+  Only a subset of features are supported to prevent DoS attacks.
+  """
+  REGEX
 }
 
+"""
+Ways to combine Searches.
+"""
 enum SearchOperators {
   AND
   OR
   NOT
 }
 
+"""
+How to Search through a field.
+"""
 type SearchParam {
-  value: String!
+  """
+  The query to search with.
+  """
+  query: String!
+  """
+  How to interpret the query.
+  """
   type: SearchTypes!
 }
 
+"""
+Defines multiple search queries to combine.
+"""
 type SearchOpt {
+  """
+  The queries to combine.
+  """
   values: [SearchParam!]
+  """
+  How to combine the queries.
+  """
   type: SearchOperators
 }
 
+"""
+A search, so that the one doesn't have to combine searches.
+"""
 union Search = SearchOpt | SearchParam
 
+"""
+A search for a node.
+
+Currently only supports searching for an id.
+"""
+type NodeSearch {
+  """
+  The id to search for.
+  """
+  id: Search!
+}
+
 extend type Query {
+  """
+  Gets a node by its id.
+  """
   node(id: ID!): Node
-  nodes(ids: [ID!], search: Search, first: Int, after: ID, last: Int, before: ID): NodeConnection
+  """
+  Gets multiple nodes by their ids, or a query.
+  Supports pagination.
+  """
+  nodes(ids: [ID!], search: NodeSearch, first: Int, after: ID, last: Int, before: ID): NodeConnection
 }
 
 extend type Mutation {
-  node(node: Node): Node
-  nodes(nodes: [Node]): Node
+  """
+  Modifies a node, takes a node, with ID to modify as well as the operation to perform.
+  """
+  node(node: Node!, , operation: Operations!): Node
+  nodes(nodes: [Node!]!, operation: Operations!): Node
 }
 
 extend type Subscription {
+  """
+  Subscribes to changes in a node, by its id.
+  """
   node(id: ID!): Node
-  nodes(ids: [ID!], search: Search, first: Int, after: ID, last: Int, before: ID): NodeConnection
+  """
+  Subscribes to changes in multiple nodes.
+  Takes in either ids or a search as well as pagination.
+  """
+  nodes(ids: [ID!], search: NodeSearch, first: Int, after: ID, last: Int, before: ID): NodeConnection
 }

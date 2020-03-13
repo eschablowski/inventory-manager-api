@@ -1,3 +1,8 @@
-import User from "./type"
-export default User;
-export * as schema from "./schema.json";
+import { UUID } from "../base";
+
+export default interface User {
+  id: UUID;
+  name: string;
+  shop: UUID;
+  users: UUID[];
+}
