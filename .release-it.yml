@@ -2,7 +2,7 @@ npm:
   publishPath: build
 
 github:
-  release: true
+  release: false
   releaseName: "Release ${version}"
   tokenRef: "GITHUB_TOKEN"
   assets: "dist/*"
