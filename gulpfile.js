@@ -1,90 +1,41 @@
-const path = require("path");
-const { src, dest, parallel, series, watch } = require("gulp");
-const gulpTs = require("gulp-typescript");
-const jsonEditor = require("gulp-json-editor");
-const replace = require("gulp-replace");
-const rename = require("gulp-rename");
-const tar = require("gulp-tar");
-const gzip = require("gulp-gzip");
-const source = require("vinyl-source-stream");
-const { importSchema } = require("graphql-import");
-const yargs = require("yargs");
+const { parallel} = require("gulp");
+const openapi3 = require("./gulp/openapi");
+const ts = require("./gulp/ts");
+const graphql = require("./gulp/graphql");
+const jsonSchema = require("./gulp/json-shema");
+const docs = require("./gulp/docs");
+const packageJson = require("./gulp/package");
 
-const jsonSchemaBundle = require("./gulp.json-bundle");
+exports.openapi = openapi3.default;
+exports.watchOpenapi = openapi3.watch;
 
-async function graphql() {
-  const stream = source("schema.gql");
-  stream.end(
-    await importSchema(path.resolve(__dirname, "src", "index.gql"), {
-      cwd: __dirname,
-      forceSchemaDefinition: true
-    })
-  );
-  return stream.pipe(dest("build")).pipe(dest("dist"));
-}
+exports.ts = ts.default;
+exports.watchTs = ts.watch;
 
-function json() {
-  const { host } = yargs.option("host", {
-    alias: "h",
-    demandOption: false,
-    default: "https://schemas.inventorymanager.com",
-    describe: "The host to pair the shema ids with.",
-    type: "string"
-  }).argv;
-  return src(["src/*/schema.json", "src/*/schema.*.json"])
-    .pipe(jsonSchemaBundle())
-    .pipe(replace(/{{\s*host\s*}}/, host))
-    .pipe(dest("build"))
-    .pipe(
-      rename(p => {
-        p.basename = p.basename.replace("schema", p.dirname);
-        p.dirname = "/";
-      })
-    )
-    .pipe(tar("schemas.tar"))
-    .pipe(gzip())
-    .pipe(dest("dist"));
-}
+exports.json = jsonSchema.default;
+exports.watchJson = jsonSchema.watch;
 
-function ts() {
-  const tsProject = gulpTs.createProject("tsconfig.json", {
-    declaration: true
-  });
-  return src(["index.ts", "src/**/*.ts", "src/**/*.json"], {
-    sourcemaps: true
-  })
-    .pipe(tsProject())
-    .pipe(dest("build"));
-}
+exports.graphql = exports.gql = graphql.default;
+exports.watchGraphQL = graphql.watch;
 
-function packageJson() {
-  return src(["package.json"])
-    .pipe(
-      jsonEditor(json => {
-        delete json.devDependencies;
-        json.private = false;
-        return json;
-      })
-    )
-    .pipe(dest("build"));
-}
+exports.packageJson = packageJson.default;
+exports.watchPackageJson = packageJson.watch;
 
-exports.ts = ts;
-exports.watchTs = () =>
-  watch(["src/**/.ts", "tsconfig.json", "package.json", "index.ts"], ts);
-
-exports.json = json;
-exports.watchJson = () => watch(["src/**/.json"], json);
-
-exports.graphql = graphql;
-exports.gql = graphql;
-exports.watchGraphQL = () => watch(["src/**/.gql", "src/**/.graphql"], graphql);
-
-exports.packageJson = packageJson;
+exports.readMe = exports.docs = docs.default;
+exports.watchDocs = docs.watch;
 
 exports.watch = parallel(
   exports.watchGraphQL,
   exports.watchJson,
-  exports.watchTs
+  exports.watchTs,
+  exports.watchOpenapi,
+  exports.watchDocs,
+  exports.watchPackageJson
 );
-exports.default = parallel(graphql, json, ts, packageJson);
+exports.default = parallel(
+  exports.graphql,
+  exports.json,
+  exports.ts,
+  exports.openapi,
+  exports.packageJson
+);

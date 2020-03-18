@@ -9,14 +9,18 @@
 # import Query, Mutation, Subscription from "vendor/schema.gql"
 # import Query, Mutation, Subscription from "workflow/schema.gql"
 
+# import Query, Mutation, Subscription from "server/schema.gql"
+
 type Query {
+  """
+  Gets the version of the GraphQL API.
+  Is semver compatible, i.e. any version within the major should be interchangeable.
+  """
   verison: String! @cacheControl(maxAge: 3600)
-  server: String! @cacheControl(maxAge: 0)
 }
 
 type Subscription {
   version: String! @cacheControl(maxAge: 3600)
-  server: String! @cacheControl(maxAge: 0, scope: PRIVATE)
 }
 
 schema {

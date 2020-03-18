@@ -13,7 +13,8 @@
     "release": "release-it",
     "commit": "run-s git-add git-cz",
     "git-add": "git-add",
-    "git-cz": "git-cz"
+    "git-cz": "git-cz",
+    "swagger": "docker run -p 8080:8080 -e SWAGGER_JSON=/swagger.json -v `pwd`/build/swagger.json:/swagger.json swaggerapi/swagger-ui"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.6",
@@ -25,15 +26,22 @@
     "gulp-gzip": "^1.4.2",
     "gulp-json-editor": "^2.5.4",
     "gulp-merge": "^0.1.1",
+    "gulp-merge-json": "^2.1.0",
     "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-tar": "^3.1.0",
+    "gulp-typedoc": "^2.2.4",
     "gulp-typescript": "^6.0.0-alpha.1",
     "gulp-util": "^3.0.8",
+    "gulp-yaml": "^2.0.4",
     "json-schema-ref-parser": "^7.1.4",
+    "lodash": "^4.17.15",
     "npm-run-all": "^4.1.5",
     "release-it": "^13.0.2",
+    "smash-streams": "^1.0.0",
     "through2": "^3.0.1",
+    "typedoc": "^0.16.11",
+    "typedoc-plugin-markdown": "^2.2.17",
     "typescript": "^3.8.3",
     "vinyl-source-stream": "^2.0.0",
     "yargs": "^15.3.0"

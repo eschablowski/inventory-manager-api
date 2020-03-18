@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema#",
   "$id": "{{host}}/base.json",
-  "title": "User",
-  "description": "A user for the inventory manager",
+  "title": "Base",
+  "description": "Basic type definitions for the inventory manager",
   "definitions": {
     "uuid": {
       "type":"string",

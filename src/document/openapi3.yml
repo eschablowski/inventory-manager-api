@@ -1,0 +1,4 @@
+components:
+  responses:
+    Document:
+      $ref: "#/components/schemas/Document_Response"

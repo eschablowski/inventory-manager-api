@@ -14,7 +14,7 @@ interface Node {
 
 
 """
-A Node Edge, namely the id and the actual sto
+A Node Edge, namely the id and the actual storage element.
 
 Useful for pagination
 """
@@ -242,6 +242,9 @@ extend type Mutation {
   Modifies a node, takes a node, with ID to modify as well as the operation to perform.
   """
   node(node: Node!, , operation: Operations!): Node
+  """
+  Modifies multiple nodes, takes an array of nodes to modify, along with the ID to modify and the Operation to perform
+  """
   nodes(nodes: [Node!]!, operation: Operations!): Node
 }
 
@@ -256,3 +259,5 @@ extend type Subscription {
   """
   nodes(ids: [ID!], search: NodeSearch, first: Int, after: ID, last: Int, before: ID): NodeConnection
 }
+
+scalar Upload

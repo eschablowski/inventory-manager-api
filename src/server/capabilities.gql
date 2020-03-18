@@ -1,0 +1,49 @@
+"""
+A list of capabilities that a server can have.
+"""
+enum Capabilities {
+    """
+    Indicates that a server is capable of authorizing a user.
+    """
+    AUTH
+    """
+    Indicates that this server is capable of alowing API version downgrading, i.e. this server can handle multiple versions of the API spec.
+    """
+    DOWNGRADE
+    """
+    Designates that this is the primary server instance in the world.
+    """
+    PRIMARY
+    """
+    Indicates that this server is capable of permanent storage.
+    """
+    STORAGE
+    """
+    Indicates that this is the primary server in this location.
+    """
+    LOCAL_PRIMARY
+    """
+    Indicates that this server is capable of redirecting the user to a new server.
+    """
+    REDIRECT
+    """
+    Indicates that this server is a clone of another instance.
+    """
+    CLONE
+    """
+    Indicates that this server is capable of relaying changes in real-time.
+    """
+    REAL_TIME
+    """
+    Indicates that this server is capable of relaying UTC time.
+    """
+    TIMESERVER
+    """
+    Indicates that this server can output diagnostic information about its hardware.
+    """
+    HARDWARE
+    """
+    Indicates that this server can be used for administering multiple servers.
+    """
+    ADMIN
+}

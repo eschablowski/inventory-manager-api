@@ -1,0 +1,155 @@
+paths:
+  /search:
+    get:
+      tags:
+      - "base"
+      summary: "Searches through every entry available to get the correct ones."
+      description: "Searches through every entry to enable easier searching."
+      operationId: "search"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "search"
+        description: "Search Query to be conducted"
+        required: true
+        schema:
+          type: string
+          example: "hello world"
+      - in: "query"
+        name: "first"
+        description: "The number of nodes to return from the cursor or start of the result"
+        required: false
+        schema:
+          type: integer
+          min: 0
+          example: 10
+      - in: "query"
+        name: "after"
+        description: "The cursor to the node before the first one to be returned"
+        required: false
+        schema:
+          type: "string"
+          example: "00000000-0000-0000-0000-000000000000"
+      responses:
+        401:
+          description: "Invalid authentication."
+        405:
+          description: "Invalid search"
+        200:
+          schema:
+            $ref: "#/components/responses/Search"
+  /node/{id}:
+    get:
+      tags:
+        - base
+      parameters:
+      - in: "path"
+        name: id
+        description: "The id of the node to return."
+        schema:
+          example: 00000000-0000-0000-0000-000000000000
+          type: string
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        200:
+          description: "The node to be returned."
+          schema:
+            $ref: "#/components/responses/Node"
+  /graphql:
+    get:
+      parameters:
+        - in: "query"
+          name: "query"
+          description: "The GraphQL query."
+          required: true
+          schema:
+            type: "string"
+            example: "{me{name}}"
+        - in: "query"
+          name: "variables"
+          description: "The GraphQL variables."
+          required: false
+          schema:
+            type: "object"
+            example:
+              name: "Example name."
+        - in: "query"
+          name: "operationName"
+          description: "The GraphQL operation name."
+          required: false
+          schema:
+            type: "string"
+            example: "name"
+      produces: "application/json"
+      tags:
+        - GraphQL
+      summary: The GraphQL endpoint.
+      description: "The endpoint for GraphQL queries, mutations, and subscriptions."
+      responses:
+        200:
+          description: "The GraphQL response."
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                example:
+                  name: Example Name
+              errors:
+                type: array
+                example: []
+    post:
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The GraphQL query."
+          required: true
+          schema:
+            type: object
+            properties:
+              query:
+                type: "string"
+                example: "{me{name}}"
+              variables:
+                type: "object"
+                example:
+                  name: "Example name."
+              operationName:
+                type: string
+                example: name
+      consumes: "application/json"
+      produces: "application/json"
+      tags:
+        - GraphQL
+      summary: The GraphQL endpoint.
+      description: "The endpoint for GraphQL queries, mutations, and subscriptions."
+      responses:
+        200:
+          description: "The GraphQL response."
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                example:
+                  name: Example Name
+              errors:
+                type: array
+                example: []
+components:
+  responses:
+    Search:
+      $ref: "#/components/schemas/Search_Response"
+    Node:
+      oneOf:
+        - $ref: "#/components/responses/Document"
+      example:
+        id: 00000000-0000-0000-0000-000000000000
+        name: "Hello World"

@@ -1,0 +1,143 @@
+# import Node, PageInfo, Edge, Operations from "../base/schema.gql"
+# import Capabilities from "./capabilities.gql"
+
+type Server {
+  """
+  An UUIDv4 generated at server initialization, can be used to query if you got reconnected or the server crashed.
+  """
+  id: ID!
+  """
+  The region this server is located in.
+  E.g. America/California
+  """
+  region: String!
+  """
+  The name of this server.
+  E.g. America Primary
+  """
+  name: String!
+  """
+  The server version.
+  Is semver compatible.
+  """
+  version: String!
+  """
+  The uptime of this server.
+  In Milliseconds
+  """
+  uptime: Int!
+  """
+  The hardware diagnostics for this server.
+  """
+  hardware: Hardware
+  """
+  The capabilities supported by this server.
+  """
+  capabilities: [Capabilities]
+}
+
+type Hardware {
+    """
+    CPU diagnostics.
+    """
+    cpu: CPU!
+    """
+    RAM diagnostics.
+    """
+    memory: Memory!
+    """
+    Server system uptime.
+    """
+    uptime: Int!
+  }
+
+"""
+Units for CPU speed.
+"""
+enum SpeedUnits {
+  """
+  Hertz.
+  """
+  HZ
+  """
+  Kilo Hertz, i.e. 1000 Hz
+  """
+  KHz
+  """
+  Mega Hertz, i.e. 1000 KHz
+  """
+  MHz
+  """
+  Giga Hertz, i.e. 1000 MHz
+  """
+  GHz
+  """
+  Terra Hertz, i.e. 1000 GHz
+  I seriously doubt we will ever need this.
+  """
+  THz
+  """
+  Peta Hertz, i.e. 1000 THz
+  I seriously doubt we will ever need this.
+  """
+  PHz
+}
+"""
+CPU diagnostics information.
+"""
+type CPU {
+  """
+  The model of the CPU
+  """
+  model: String!
+  """
+  The CPU speed in the unit provided or mega hertz.
+  """
+  speed(unit: SpeedUnits = MHz): Float!
+  times: Times
+}
+
+type Times {
+    user: Int!
+    nice: Int!
+    sys: Int!
+    idle: Int!
+    irq: Int!
+  }
+
+type Memory {
+  free: Int!
+  total: Int!
+}
+
+type ServerEdge implements Edge {
+  node: Server
+  cursor: ID
+}
+
+type ServerConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [ServerEdge]
+  totalCount: Int
+  servers: [Server]
+}
+
+extend type Query {
+  """
+  The server that 
+  """
+  server: Server! @cacheControl(maxAge: 0, scope: PRIVATE)
+  servers(first: Int, after: ID, last: Int, before: ID): ServerConnection @cacheControl(maxAge: 10)
+}
+
+extend type Mutation {
+  """
+  Gives a reconnection URL to a server with the specified ID or capabilities.
+  """
+  server(id: ID, capabilities: [Capabilities!]): String @cacheControl(maxAge: 10, scope: PUBLIC)
+}
+
+extend type Subscription {
+  server: String! @cacheControl(maxAge: 10, scope: PUBLIC)
+  servers: [Server!]!
+}

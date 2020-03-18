@@ -1,4 +1,4 @@
-# import Node, PageInfo, Edge, Operations from "../base/schema.gql"
+# import Node, PageInfo, Edge, Operations, Upload from "../base/schema.gql"
 
 """
 A Document describing an item, product, or order, as well as templates.
@@ -15,6 +15,7 @@ type Document {
   name: String
   """
   The filename of this document, used for determining download links, etc.
+  Also used for includes in template languages.
   """
   filename: String
   """
@@ -29,7 +30,7 @@ type Document {
   """
   version: String
   """
-  The template engine this relies on, useful for generating documents, emails and other things dynamically fro m a single source.
+  The template engine this relies on, useful for generating documents, emails and other things dynamically from a single source.
   """
   template: Template
   """
@@ -38,7 +39,7 @@ type Document {
   """
   url: String
   """
-  The raw data stored in this document.
+  The raw data stored in this document, encoded as base64.
   This property should be used with care since the maximum limit for documents is currently 4GB, and only expected to grow.
   """
   data: String
@@ -48,42 +49,123 @@ type Document {
   """
   renderedUrl: String
   """
-  The rendered data stored in this document.
+  The rendered data stored in this document, encoded as base64.
   This property should be used with care since the maximum limit for documents is currently 4GB (without rendering), and only expected to grow.
   """
   renderedData: String
 }
 
+"""
+An object describing a new Document.
+Documents are used to describe an item, product, or order, as well as templates.
+The uses for this are very extensive.
+"""
 input DocumentInput {
-  id: ID!
+  """
+  The name displayed to the user, useful for more information as well as nicer names.
+  """
   name: String!
+  """
+  The filename of this document, used for determining download links, etc.
+  Also used for includes in template languages.
+  """
   filename: String!
+  """
+  The MIME type of the document.
+  Useful for interpreting documents, showing them in browsers, as well as tracking viruses.
+  See https://www.iana.org/assignments/media-types/media-types.xhtml for more information as well as possible values.
+  """
   mime: String!
+  """
+  The version of this document, useful to manage iterations of documentation.
+  All versions are stored so that previous versions can still be accesed if the need arises.
+  """
   version: String!
+  """
+  The template engine this relies on, useful for generating documents, emails and other things dynamically from a single source.
+  """
   template: Template!
-  data: String!
+  """
+  The raw data stored in this document, encoded as base64.
+  This property should be used with care since the maximum limit for documents is currently 4GB, and only expected to grow.
+  """
+  data: String
+  """
+  An uploaded file, using the GraphQL multipart request spec.
+  Uses https://github.com/jaydenseric/graphql-upload
+  Used instead of data.
+  """
+  file: Upload
 }
 
+"""
+The templating engines available at this server.
+"""
 enum Template {
+  """
+  Signifies that this is NOT a template.
+  """
   NONE
+  """
+  Signifies that this is a nunjucks template.
+  See https://mozilla.github.io/nunjucks/.
+  """
   NUNJUCKS
 }
 
+
+"""
+An edge in a DocumentConnection.
+Useful for pagination
+"""
 type DocumentEdge implements Edge {
+  """
+  The document at the end of the edge.
+  """
   node: Document
-  cursor: ID!
+  """
+  A cursor for use in pagination
+  """
+  cursor: ID
 }
 
+"""
+A connection to a list of Documents.
+
+Useful for pagination.
+"""
 type DocumentConnection implements Connection {
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
+  """
+  A list of document edges.
+  """
   edges: [DocumentEdge]
+  """
+  A count of the total number of documents in this connection, ignoring pagination.
+  This allows a client to fetch the first five documents by passing "5" as the argument to "first", then fetch the total count so it could display "5 of 83", for example.
+  """
   totalCount: Int
+  """
+  A list of all of the objects returned in the connection.
+  This is a convenience field provided for quickly exploring the API; rather than querying for "{ edges { node } }" when no edge data is needed, this field can be be used instead.
+  Note that when clients like Relay need to fetch the "cursor" field on the edge to enable efficient pagination, this shortcut cannot be used, and the full "{ edges { node } }" version should be used instead.
+  """
   documents: [Document]
 }
 
 extend type Query {
-  getDocument(id: ID): Document
-  getDocuments(
+  """
+  Gets a document by its id.
+  """
+  document(id: ID): Document
+  """
+  Gets multiple documents by their ids or a query.
+  Supports pagination.
+  """
+  documents(
     id: [ID!]
     search: DocumentInput
     first: Int
@@ -91,14 +173,35 @@ extend type Query {
     last: Int
     before: ID
   ): DocumentConnection
+  """
+  Gets all documents in the store.
+  Useful to display a list of Documents.
+  Supports pagination.
+  """
   allDocuments(first: Int, after: ID, last: Int, before: ID): DocumentConnection
 }
 
 extend type Mutation {
-  document(document: DocumentInput, operation: Operations = CREATE): Document
-  createDocument(document: DocumentInput): ID!
+  """
+  Changes the document selected by the id according to the document input and the operation.
+  """
+  document(id: ID, document: DocumentInput, operation: Operations = CREATE): Document
+  """
+  Creates a new document conforming to the document input.
+  """
+  createDocument(document: DocumentInput): Document
+  """
+  Creates an array of documents conforming to the document inputs.
+  """
   createDocuments(documents: [DocumentInput]): [Document]
+  """
+  Deletes a document based on its id.
+  """
   deleteDocument(id: ID!): Document
+  """
+  Deletes documents based on search parameters.
+  Supports pagination, so you can delete the first 10 of your search.
+  """
   deleteDocuments(
     search: DocumentInput
     first: Int

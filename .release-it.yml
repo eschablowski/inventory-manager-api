@@ -1,4 +1,5 @@
 npm:
+  publish: false
   publishPath: build
 
 github:
