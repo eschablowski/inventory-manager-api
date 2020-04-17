@@ -13,7 +13,7 @@ const config: webpack.Configuration = {
   entry: {
     index: getSrc("index.ts"),
     graphql: getSrc("graphql.ts"),
-    openapi: getSrc("openapi3.ts"),
+    openapi3: getSrc("openapi3.ts"),
   },
   devtool: false,
   output: {
