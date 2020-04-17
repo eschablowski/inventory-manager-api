@@ -4,8 +4,8 @@ npm:
 
 github:
   release: false
-  releaseName: "Release ${version}"
-  tokenRef: "GITHUB_TOKEN"
-  assets: "dist/*"
+  releaseName: Release ${version}
+  tokenRef: GITHUB_TOKEN
+  assets: dist/*
 hooks:
-  "before:release": npm run-script build
+  before:release: npm run-script build

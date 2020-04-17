@@ -1,19 +1,25 @@
 {
   "compilerOptions": {
-    "removeComments": false,
-    "noLib": false,
-    "emitDecoratorMetadata": true,
-    "noImplicitAny": false,
-    "module": "commonjs",
     "target": "ES2015",
-    "experimentalDecorators": true,
-    "sourceMap": false,
+    "module": "CommonJS",
+    "esModuleInterop": true,
     "declaration": true,
-    "noResolve": false,
+    "declarationDir": "build",
+    "removeComments": true,
+    "pretty": false,
+    "allowJs": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "lib": [
+      "ES2019"
+    ],
+    "sourceMap": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ],
   },
   "include": [
-    "src/**/*.ts", "index.ts"
-  ]
+    "src/**/*.ts"
+  ],
 }

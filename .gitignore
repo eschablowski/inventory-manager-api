@@ -1,5 +1,8 @@
 /build
 /dist
 /node_modules
-/.tmp
-*.tgz
+.yarn/unplugged
+.yarn/install-state.gz
+.yarn/build-state.yml
+.pnp.js
+.DS_Store
