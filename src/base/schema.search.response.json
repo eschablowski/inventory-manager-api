@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "{{host}}/search.response.json",
+    "title": "Nodes",
+    "description": "Basic type definitions for the inventory manager",
+    "type": "object",
+    "properties": {
+        "results": {
+            "type": "array",
+            "items": {
+                "$ref": "./schema.node.json"
+            }
+        },
+        "last": {
+            "type": "boolean"
+        },
+        "total": {
+            "type": "integer",
+            "minimum": 0
+        }
+    }
+}

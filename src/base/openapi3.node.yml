@@ -1,0 +1,64 @@
+---
+paths:
+  /node/{id}:
+    get:
+      summary: Retrieve a node by its id.
+      description: Returns a Node by its respective identifier.
+      tags:
+        - Basic
+      operationId: getNodeById
+      parameters:
+        - in: path
+          name: id
+          description: The id of the node to return.
+          schema:
+            example: 00000000-0000-0000-0000-000000000000
+            type: string
+      responses:
+        200:
+          $ref: "#/components/responses/Node"
+        404:
+          description: The specified Node was not found.
+    post:
+      summary: Modify a Node by id.
+      description: Replaces a given node by the id.
+      tags:
+        - Basic
+      operationId: changeNodeById
+      parameters:
+        - in: path
+          name: id
+          description: The id of the node to return.
+          schema:
+            example: 00000000-0000-0000-0000-000000000000
+            type: string
+      responses:
+          200:
+            $ref: "#/components/responses/Node"
+          404:
+            description: The specified Node was not found.
+    
+components:
+  responses:
+    Node:
+      description: A Node object.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: "#/components/responses/Document"
+  examples:
+    Node:
+      value:
+        - id: 00000000-0000-0000-0000-000000000000
+          name: Hello World
+          filename: hello_world.txt
+          mime: application/txt
+          version: 1.0.0
+          template: NONE
+          url: //downloads.{{ host }}/document/00000000-0000-0000-0000-000000000000/raw
+          renderedUrl: //downloads.{{ host }}/document/00000000-0000-0000-0000-000000000000/rendered
+  schemas:
+    Node: !import-schema
+      loc: Node
+      file: ./schema.node.json

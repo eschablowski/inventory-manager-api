@@ -1,0 +1,16 @@
+enum Types {
+  SERVER,
+  SHOP,
+  USER,
+  TEAM,
+  DOCUMENT,
+  PRODUCT,
+  ITEM,
+  VENDOR,
+  WORKFLOW,
+  ORDER_INCOMING,
+  ORDER_OUTGOING,
+  ADD_ON,
+  LICENCE,
+}
+export default Types;

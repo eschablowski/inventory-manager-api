@@ -1,0 +1,174 @@
+---
+paths:
+  /search:
+    get:
+      tags:
+        - Basic
+        - Search
+      summary: Searches through every entry available to get the correct ones.
+      description: |
+        Searches through every entry to enable easier searching.
+        Designed for User-initiated search.
+      operationId: search
+      parameters:
+        - in: query
+          name: search
+          description: Search Query to be conducted
+          required: true
+          schema:
+            type: string
+            example: hello world
+        - in: query
+          name: first
+          description: The number of nodes to return from the cursor or start of the result
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            example: 10
+        - in: query
+          name: after
+          description: The cursor to the node before the first one to be returned
+          required: false
+          schema:
+            type: string
+            example: 00000000-0000-0000-0000-000000000000
+        - in: query
+          name: last
+          description: The number of nodes to return from the cursor or start of the result
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+        - in: query
+          name: before
+          description: The cursor to the node after the last one to be returned
+          required: false
+          schema:
+            type: string
+            example: 11110000-0000-0000-0000-000000000000
+
+        - in: query
+          name: after
+          description: The cursor to the node after the last one to be returned
+          required: false
+          schema:
+            type: string
+            example: 11110000-0000-0000-0000-000000000000
+        - in: query
+          name: sortBy
+          description: |
+            Sort by a column.
+            The default is by the relevance of the search using a weighed sum of all fields.
+          required: false
+          schema:
+            type: string
+            example: updatedAt
+      responses:
+        401:
+          description: Invalid authentication.
+        405:
+          description: Invalid search
+        200:
+          $ref: "#/components/responses/Search"
+    post:
+      summary: Advanced Search
+      description: |
+        Utilizes a sequelize style request body to perform more advanced searches.
+        Designed for API or Rule based searching.
+      tags:
+        - Basic
+        - Search
+      operationId: searchPost
+      parameters:
+        - in: query
+          name: first
+          description: The number of nodes to return from the cursor or start of the result
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - in: query
+          name: after
+          description: The cursor to the node before the first one to be returned
+          required: false
+          schema:
+            type: string
+            example: 00000000-0000-0000-0000-000000000000
+        - in: query
+          name: last
+          description: The number of nodes to return from the cursor or start of the result
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - in: query
+          name: before
+          description: The cursor to the node after the last one to be returned
+          required: false
+          schema:
+            type: string
+            example: 11110000-0000-0000-0000-000000000000
+        - in: query
+          name: sortBy
+          description: The columns to sort by, from greatest to lowest precedence, the default is to return semi-randomly in accordance with the internal data structure.
+          required: false
+          schema:
+            type: string
+            example: updatedAt
+      requestBody:
+        description: The search.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/Search"
+            examples:
+              Basic:
+                value:
+                  name:
+                    $and:
+                      - $like: "hello%"
+                      - $substring: world
+          application/xml:
+            schema:
+              $ref: "#/components/requestBodies/Search"
+      responses:
+        200:
+          $ref: "#/components/responses/Search"
+
+components:
+  responses:
+    Search:
+      description: A Node object.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nodes"
+          examples:
+            Basic:
+              value: !import-raw ./examples/search.json
+        application/xml:
+          schema:
+            $ref: "#/components/schemas/Nodes"
+          examples:
+            Basic:
+              value: !import-raw ./examples/search.xml
+  examples:
+    Search:
+      value:
+        - id: 00000000-0000-0000-0000-000000000000
+    Search_xml:
+      value:
+        - id: 00000000-0000-0000-0000-000000000000
+  requestBodies:
+    Search:
+      $ref: "#/components/schemas/Search"
+  schemas:
+    Search: !import-schema
+      file: ./schema.search.json
+      loc: Search
+    Nodes: !import-schema
+      file: ./schema.search.response.json
+      loc: Nodes

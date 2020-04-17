@@ -19,13 +19,13 @@
     },
     "emailServer": {
       "title": "E-Mail Server",
-      "desctiption": "This is the email server string.",
+      "description": "This is the email server string.",
       "$comment": "Likely to change to an object/array.",
       "type": "string"
     },
     "teams": {
       "title": "Teams",
-      "desctiption": "These are the Teams that the user is on.",
+      "description": "These are the Teams that the user is on.",
       "type": "array",
       "items": {
         "$ref": "../base/schema.json#/definitions/uuid",
@@ -36,7 +36,7 @@
     },
     "workflows": {
       "title": "Workflows",
-      "desctiption": "These are the Workflows that the Shop has.",
+      "description": "These are the Workflows that the Shop has.",
       "type": "array",
       "items": {
         "$ref": "../base/schema.json#/definitions/uuid",
@@ -47,7 +47,7 @@
     },
     "vendors": {
       "title": "Vendors",
-      "desctiption": "These are the Vendors that the Shop has.",
+      "description": "These are the Vendors that the Shop has.",
       "type": "array",
       "items": {
         "$ref": "../base/schema.json#/definitions/uuid",
@@ -58,7 +58,7 @@
     },
     "addOns": {
       "title": "Add Ons",
-      "desctiption": "These are the Add Ons that the Shop has.",
+      "description": "These are the Add Ons that the Shop has.",
       "type": "array",
       "items": {
         "$ref": "../base/schema.json#/definitions/uuid",

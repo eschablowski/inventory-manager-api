@@ -1,14 +1,169 @@
 {
-    "$schema": "https://json-schema.org/draft/2019-09/schema#",
-    "$id": "{{host}}/base.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "{{host}}/search.json",
     "title": "Search",
-    "description": "Basic type definitions for the inventory manager",
-    "type": "array",
-    "items": {
-        "type": "string",
-        "example": "hello world"
+    "description": "Advanced Search mechanism for quering all data fields.",
+    "definitions": {
+        "query": {
+            "type": "object",
+            "properties": {
+                "$and": {
+                    "$ref": "#/definitions/and"
+                },
+                "$or": {
+                    "$ref": "#/definitions/or"
+                },
+                "$gt": {
+                    "$ref": "#/definitions/gt"
+                },
+                "$gte": {
+                    "$ref": "#/definitions/gte"
+                },
+                "$lt": {
+                    "$ref": "#/definitions/lt"
+                },
+                "$lte": {
+                    "$ref": "#/definitions/lte"
+                },
+                "$eq": {
+                    "$ref": "#/definitions/eq"
+                },
+                "$not": {
+                    "$ref": "#/definitions/not"
+                },
+                "$between": {
+                    "$ref": "#/definitions/between"
+                },
+                "$like": {
+                    "$ref": "#/definitions/like"
+                },
+                "$startsWith": {
+                    "$ref": "#/definitions/startsWith"
+                },
+                "$endsWith": {
+                    "$ref": "#/definitions/endsWith"
+                },
+                "$substring": {
+                    "$ref": "#/definitions/endsWith"
+                },
+                "$in": {
+                    "$ref": "#/definitions/endsWith"
+                }
+            },
+            "additionalProperties": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/primitive"
+                    },
+                    {
+                        "$ref": "#/definitions/query"
+                    }
+                ]
+            }
+        },
+        "and": {
+            "title": "AND",
+            "description": "Analagous to the AND SQL operation",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/query"
+            },
+            "minItems": 2
+        },
+        "or": {
+            "title": "OR",
+            "description": "Analagous to the OR SQL operation",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/query"
+            },
+            "minItems": 2
+        },
+        "gt": {
+            "description": "Tests whether a property is greater than the provided value.",
+            "title": "Greater Than",
+            "type": "number"
+        },
+        "gte": {
+            "description": "Tests whether a property is greater than or equal to the provided value.",
+            "title": "Greater Than or Equal To",
+            "type": "number"
+        },
+        "lt": {
+            "description": "Tests whether a property is greater than the provided value.",
+            "title": "Greater Than",
+            "type": "number"
+        },
+        "lte": {
+            "description": "Tests whether a property is less than or equal to the provided value.",
+            "title": "Less Than or Equal To",
+            "type": "number"
+        },
+        "eq": {
+            "description": "Tests whether a property is equal to the provided value.",
+            "title": "Equal To",
+            "$ref": "#/definitions/primitive"
+        },
+        "not": {
+            "$ref": "#/definitions/query"
+        },
+        "between": {
+            "title": "Between",
+            "description": "Checks whether the value is between the given minimum and maximum values",
+            "type": "array",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+        },
+        "like": {
+            "title": "Like",
+            "description": "Checks whether the value is like the one given.",
+            "type": "string"
+        },
+        "startsWith": {
+            "title": "Starts With",
+            "description": "Checks whether the value starts with the one given.",
+            "type": "string"
+        },
+        "endsWith": {
+            "title": "Ends With",
+            "description": "Checks whether the value ends with the one given.",
+            "type": "string"
+        },
+        "substring": {
+            "title": "Substring",
+            "description": "Checks whether the value contains the one given.",
+            "type": "string"
+        },
+        "in": {
+            "title": "In",
+            "description": "Checks wheter the value is one of the ones given.",
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/primitive"
+            }
+        },
+        "primitive": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "integer"
+                },
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "boolean"
+                }
+            ]
+        }
     },
-    "example": [
-        "hello world"
-    ]
+    "$ref": "#/definitions/query"
 }

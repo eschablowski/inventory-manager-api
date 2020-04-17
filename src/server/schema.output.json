@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "{{host}}/product.json",
-  "title": "Product",
+  "$id": "{{host}}/server.json",
+  "title": "Server",
   "description": "A product in the inventory manager",
   "type": "object",
   "definitions": {

@@ -1,0 +1,86 @@
+---
+paths:
+  /graphql:
+    get:
+      operationId: gqlGet
+      parameters:
+        - in: query
+          name: query
+          description: The GraphQL query.
+          required: true
+          schema:
+            type: string
+            example: "{me{name}}"
+        - in: query
+          name: variables
+          description: The GraphQL variables.
+          required: false
+          schema:
+            type: object
+            example:
+              name: Example name.
+        - in: query
+          name: operationName
+          description: The GraphQL operation name.
+          required: false
+          schema:
+            type: string
+            example: name
+      tags:
+        - GraphQL
+      summary: The GraphQL endpoint.
+      description: The endpoint for GraphQL queries, mutations, and subscriptions.
+      responses:
+        200:
+          description: The GraphQL response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    example:
+                      name: Example Name
+                  errors:
+                    type: array
+                    example: []
+    post:
+      operationId: gqlPost
+      parameters:
+        - in: body
+          name: body
+          description: The GraphQL query.
+          required: true
+          schema:
+            type: object
+            properties:
+              query:
+                type: string
+                example: "{me{name}}"
+              variables:
+                type: object
+                example:
+                  name: Example name.
+              operationName:
+                type: string
+                example: name
+      tags:
+        - GraphQL
+      summary: The GraphQL endpoint.
+      description: The endpoint for GraphQL queries, mutations, and subscriptions.
+      responses:
+        200:
+          description: The GraphQL response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    example:
+                      name: Example Name
+                  errors:
+                    type: array
+                    example: []

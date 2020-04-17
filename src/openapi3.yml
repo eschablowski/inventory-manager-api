@@ -1,38 +1,86 @@
-swagger: "2.0"
+!import ./base/openapi3.yml
+---
+!import ./document/openapi3.yml
+---
+openapi: 3.0.0
 info:
-  description: "This is the REST API specification for the inventory manager."
-  version: "1.0.0"
-  title: "Inventory Manager"
-  # termsOfService: "http://swagger.io/terms/"
+  description: This is the REST API specification for the inventory manager.
+  version: 1.0.0
+  title: Inventory Manager
+  # termsOfService: http://swagger.io/terms/
   contact:
-    email: "eschablowski"
+    email: eschablowski
   license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "{{ host }}"
-basePath: "/v1"
-schemes:
-  - "https"
-  - "http"
-  - "ws"
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
 
-tags:
-  - GraphQL
-  - base
+# servers:
+#   - url: "/v1"
+#     description: The current server, most likely a mock or testing server.
+#   - url: "{scheme}://{stage}.api.{{host}}:{port}/v1"
+#     description: The Staging Servers
+#     variables:
+#       port:
+#         default: "443"
+#       stage:
+#         description: The development, the mock stage is designated for generating bogus data to either test responses in swagger ui or testing clients.\nTesting is the next stage, which does not require a valid login and stores data by the client id, or api key for 24 hours.\nThe final test is staging which requires the setup of proper stores, accounts, etc. over the online UI.
+#         default: "mock"
+#         enum:
+#           - mock
+#           - testing
+#           - staging
+#       scheme:
+#         enum:
+#           - http
+#           - https
+#           - ws
+#         default: https
+#   - url: "{scheme}://api.{{host}}:port/v1"
+#     description: The Production Servers
+#     variables:
+#       port:
+#         default: "443"
+#       scheme:
+#         enum:
+#           - http
+#           - https
+#           - ws
+#         default: https
 
-securityDefinitions:
-  oauth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
-  apiKey:
-    type: "apiKey"
-    name: "apiKey"
-    in: "header"
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: apiKey
+      in: header
+    oAuth:
+      type: oauth2
+      flows: 
+        password:
+          authorizationUrl: http://example.org/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+        implicit:
+          authorizationUrl: http://example.org/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+        clientCredentials:
+          authorizationUrl: http://example.org/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+        authorizationCode:
+          authorizationUrl: http://example.org/api/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+  responses:
+    404:
+      description: The resource wasn't found.
+      
 
 externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+  description: Inventory Manager Documentation
+  url: http://developer.inventorymanager.com

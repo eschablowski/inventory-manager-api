@@ -1,6 +1,6 @@
 {
-    "$schema": "https://json-schema.org/draft/2019-09/schema#",
-    "$id": "{{host}}/base.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "{{host}}/node.json",
     "title": "Node",
     "description": "Node definition for the inventory manager",
     "type": "object",

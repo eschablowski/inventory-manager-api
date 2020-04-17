@@ -19,7 +19,7 @@
     },
     "passwordHash": {
       "title": "Password Hash",
-      "desctiption": "This is an indication for the hash that is used to protect the users password.",
+      "description": "This is an indication for the hash that is used to protect the users password.",
       "type": "string",
       "enum": [
         "BCRYPT",
@@ -28,7 +28,7 @@
     },
     "twoFactorAuthenticationType": {
       "title": "Two Factor Authentication Type",
-      "desctiption": "This is the type of two factor authentication used by the user.",
+      "description": "This is the type of two factor authentication used by the user.",
       "type": "string",
       "enum": [
         "NONE",
@@ -38,7 +38,7 @@
     },
     "teams": {
       "title": "Teams",
-      "desctiption": "These are the Teams that the user is on.",
+      "description": "These are the Teams that the user is on.",
       "type": "array",
       "items": {
         "$ref": "../base/schema.json#/definitions/uuid",
@@ -49,14 +49,14 @@
     },
     "name": {
       "title": "Name",
-      "desctiption": "The Users name.",
+      "description": "The Users name.",
       "type": "string"
     },
     "email": {
       "title": "Name",
-      "desctiption": "The Users name.",
+      "description": "The Users name.",
       "type": "string",
-      "pattern": "^([0-9a-zA-Z](?>[-.\\w]*[0-9a-zA-Z])*@(?>[0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$"
+      "pattern": "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$"
     }
   }
 }
