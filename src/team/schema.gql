@@ -1,4 +1,4 @@
-type Team {
+type Team implements Node {
   id: ID
   name: String
   users(first: Int, after: ID, last: Int, before: ID): UserConnection

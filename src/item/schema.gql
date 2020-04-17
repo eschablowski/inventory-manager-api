@@ -1,7 +1,7 @@
 # import Node, PageInfo, Edge, Operations from "../base/schema.gql"
 # import DocumentInput, Document, DocumentConnection from "../document/schema.gql"
 
-type Item {
+type Item implements Node {
   id: ID!
   serialNumber: String!
   used: Boolean!

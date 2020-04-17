@@ -4,7 +4,7 @@
 A Document describing an item, product, or order, as well as templates.
 The uses for this are very extensive.
 """
-type Document {
+type Document implements Node {
   """
   The unique ID of the document.
   """
@@ -113,7 +113,6 @@ enum Template {
   NUNJUCKS
 }
 
-
 """
 An edge in a DocumentConnection.
 Useful for pagination
@@ -166,11 +165,35 @@ extend type Query {
   Supports pagination.
   """
   documents(
+    """
+    An array of Document IDs to Query. ids and search are mutually exclusive!
+    """
     id: [ID!]
+    """
+    Queries documents based on searched values.
+    """
     search: DocumentInput
+    """
+    Sets the maximum number of documents to return.
+    Mutually exlusive to last and before.
+    """
     first: Int
+    """
+    Specifies the last edge of the previous result.
+    Mutually exlusive to last and before.
+    MUST be set along with first.
+    """
     after: ID
+    """
+    Sets the maximum number of documents to return.
+    Mutually exlusive to first and after.
+    """
     last: Int
+    """
+    Specifies the first edge of the previous result.
+    Mutually exlusive to first and after.
+    MUST be set along with last.
+    """
     before: ID
   ): DocumentConnection
   """
@@ -178,14 +201,48 @@ extend type Query {
   Useful to display a list of Documents.
   Supports pagination.
   """
-  allDocuments(first: Int, after: ID, last: Int, before: ID): DocumentConnection
+  allDocuments(
+    """
+    Sets the maximum number of documents to return.
+    Mutually exlusive to last and before.
+    """
+    first: Int
+    """
+    Specifies the last edge of the previous result.
+    Mutually exlusive to last and before.
+    MUST be set along with first.
+    """
+    after: ID
+    """
+    Sets the maximum number of documents to return.
+    Mutually exlusive to first and after.
+    """
+    last: Int
+    """
+    Specifies the first edge of the previous result.
+    Mutually exlusive to first and after.
+    MUST be set along with last.
+    """
+    before: ID
+  ): DocumentConnection
 }
 
 extend type Mutation {
   """
   Changes the document selected by the id according to the document input and the operation.
   """
-  document(id: ID, document: DocumentInput, operation: Operations = CREATE): Document
+  document(
+    """
+    The id of the document to be mutated
+    """
+    id: ID
+    """
+    The partial new document, used as an operand for the operation.
+    OMITTED FOR DELETIONS
+    """
+    document: DocumentInput
+    operation: Operations = CREATE
+  ): Document
   """
   Creates a new document conforming to the document input.
   """

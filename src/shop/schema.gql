@@ -5,7 +5,7 @@
 # import AddOn from "../base/schema.gql"
 # import Workflow from "../workflow/schema.gql"
 
-type Shop {
+type Shop implements Node {
   id: ID
   name: String
   emailServer: String
@@ -22,15 +22,15 @@ input ShopInput {
 }
 
 type ShopEdge implements Edge {
-  node: Shop
-  cursor: ID
+  node: Shop!
+  cursor: ID!
 }
 
 type ShopConnection implements Connection {
   pageInfo: PageInfo!
-  edges: [ShopEdge]
-  totalCount: Int
-  shops: [Shop]
+  edges: [ShopEdge]!
+  totalCount: Int!
+  shops: [Shop]!
 }
 
 extend type Query {
@@ -48,7 +48,7 @@ extend type Query {
 
 extend type Mutation {
   shop(shop: ShopInput, operation: Operations = CREATE): Shop
-  createShop(shop: Shop): Shop
+  createShop(shop: ShopInput!): Shop
   createShops(products: [ShopInput!]): [Shop]
   deleteShop(id: ID!): Order
   deleteShops(

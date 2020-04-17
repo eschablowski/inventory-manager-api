@@ -1,4 +1,4 @@
-type Workflow {
+type Workflow implements Node {
   id: ID!
 }
 

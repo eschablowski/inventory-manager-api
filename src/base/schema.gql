@@ -1,30 +1,41 @@
 """
-A node instance is basically an instance of data.
-This is useful for showing that every storage item has a unique identifier
+# Node
+
+Nodes are unique instances of Data, associated with an unique identifier, `id`.
+
+> IDs are unique to each node, although nodes can have multiple IDs associated with them, as IDs have their own generation to allow for forward and backward compatibility.
+
+[ID Specifications](https://gihub.com/eschablowski/inventory-manager-api/tree/specifications/id)
 """
 interface Node {
   """
-  The unique identifier for this storage item.
-  Comprised of base64 encoding [type]:[id]
+  # ID
 
-  Useful for application level storage, but useless to any user.
+  IDs are unique to each node, although nodes can have multiple IDs associated with them, as IDs have their own generation to allow for forward and backward compatibility.
+
+  [ID Specifications](https://gihub.com/eschablowski/inventory-manager-api/tree/specifications/id)
   """
-  id: ID! @cacheControl(maxAge: 3600, scope: PUBLIC)
+  id: ID @cacheControl(maxAge: 3600, scope: PUBLIC)
 }
 
-
 """
-A Node Edge, namely the id and the actual storage element.
+# Node Edge
 
-Useful for pagination
+Node Edges are used to paginate through a list of `node`s.
+
+> Useful for pagination
 """
 type NodeEdge implements Edge {
   """
-  The Node at the end of the edge
+  The `Node` at the end of the edge
   """
   node: Node
   """
-  A cursor for use in pagination
+  # Cursor
+
+  Cursors are comprised of `${node.id}:${ascending?}:${order column}`
+
+  > Cursors are used in index-based pagination.
   """
   cursor: ID
 }
@@ -70,17 +81,16 @@ type PageInfo {
   When paginating backwards, are there more items?
   In other words, is this the begining?
   """
-  hasNextPage: Boolean!  @cacheControl(maxAge: 0, scope: PRIVATE)
+  hasNextPage: Boolean! @cacheControl(maxAge: 0, scope: PRIVATE)
   """
   When paginating backwards, the cursor to continue.
   """
-  startCursor: ID!  @cacheControl(maxAge: 0, scope: PRIVATE)
+  startCursor: ID! @cacheControl(maxAge: 0, scope: PRIVATE)
   """
   When paginating forwards, the cursor to continue.
   """
-  endCursor: ID!  @cacheControl(maxAge: 0, scope: PRIVATE)
+  endCursor: ID! @cacheControl(maxAge: 0, scope: PRIVATE)
 }
-
 
 """
 An edge in a connection.
@@ -89,11 +99,11 @@ interface Edge {
   """
   The Node at the end of the edge
   """
-  node: Node!
+  node: Node
   """
   A cursor for use in pagination
   """
-  cursor: ID!  @cacheControl(maxAge: 30, scope: PUBLIC)
+  cursor: ID @cacheControl(maxAge: 30, scope: PUBLIC)
 }
 
 """
@@ -103,7 +113,7 @@ interface Connection {
   """
   Information to aid in pagination.
   """
-  pageInfo: PageInfo!
+  pageInfo: PageInfo
   """
   A list of edges.
   """
@@ -112,9 +122,8 @@ interface Connection {
   A count of the total number of objects in this connection, ignoring pagination.
   This allows a client to fetch the first five objects by passing "5" as the argument to "first", then fetch the total count so it could display "5 of 83", for example.
   """
-  totalCount: Int!
+  totalCount: Int
 }
-
 
 """
 Mutation operations supported.
@@ -141,7 +150,7 @@ enum Operations {
 }
 
 """
-Specifies how the query string should be interpreted. 
+Specifies how the query string should be interpreted.
 """
 enum SearchTypes {
   """
@@ -225,6 +234,10 @@ type NodeSearch {
   id: Search!
 }
 
+input NodeInput {
+  id: ID!
+}
+
 extend type Query {
   """
   Gets a node by its id.
@@ -234,18 +247,25 @@ extend type Query {
   Gets multiple nodes by their ids, or a query.
   Supports pagination.
   """
-  nodes(ids: [ID!], search: NodeSearch, first: Int, after: ID, last: Int, before: ID): NodeConnection
+  nodes(
+    ids: [ID!]
+    search: NodeInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+  ): NodeConnection
 }
 
 extend type Mutation {
   """
   Modifies a node, takes a node, with ID to modify as well as the operation to perform.
   """
-  node(node: Node!, , operation: Operations!): Node
+  node(node: NodeInput!, operation: Operations!): Node
   """
   Modifies multiple nodes, takes an array of nodes to modify, along with the ID to modify and the Operation to perform
   """
-  nodes(nodes: [Node!]!, operation: Operations!): Node
+  nodes(nodes: [NodeInput!]!, operation: Operations!): Node
 }
 
 extend type Subscription {
@@ -257,7 +277,23 @@ extend type Subscription {
   Subscribes to changes in multiple nodes.
   Takes in either ids or a search as well as pagination.
   """
-  nodes(ids: [ID!], search: NodeSearch, first: Int, after: ID, last: Int, before: ID): NodeConnection
+  nodes(
+    """
+    The IDs of the nodes to subscribe to.
+    """
+    ids: [ID!]
+    """
+    A Search pattern for nodes to subscribe to.
+    > If a new node is created, and listening for CREATE operations, the new 
+    """
+    search: NodeInput
+    first: Int
+    after: ID
+    last: Int
+    before: ID
+    """
+    The operations to subscribe to.
+    """
+    operations: [Operations] = [CREATE, MERGE, UPDATE, DELETE]
+  ): NodeConnection
 }
-
-scalar Upload

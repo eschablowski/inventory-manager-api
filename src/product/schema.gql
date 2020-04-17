@@ -5,7 +5,7 @@
 # import Vendor from "../vendor/schema.gql"
 # import User from "../user/schema.gql"
 
-type Product {
+type Product implements Node {
   id: ID
   sku: String
   minQuantity: Quantity
@@ -23,20 +23,25 @@ type Product {
   vendor: Vendor
 }
 
+type ProductEdge implements Edge {
+  node: Product
+  cursor: ID
+}
+
 type Quantity {
   order: Float!
   stock: Float!
   production: Float!
 }
 
-type Dependency {
+type Dependency implements Node {
   id: ID!
   amount: Float!
 }
 
 type DependencyEdge implements Edge {
-  node: Dependency
-  cursor: ID
+  node: Dependency!
+  cursor: ID!
 }
 
 type DependencyConnection implements Connection {
@@ -48,17 +53,13 @@ type DependencyConnection implements Connection {
 
 input ProductInput {
   sku: String
-  minQuantity: Quantity
-  quantity: Quantity
-  highQuantity: Quantity
-  dependencies: [Dependency!]
+  # minQuantity: Quantity
+  # quantity: Quantity
+  # highQuantity: Quantity
+  # dependencies: [Dependency!]
   vendor: ID
 }
 
-type ProductEdge implements Edge {
-  node: Product
-  cursor: ID
-}
 
 type ProductConnection implements Connection {
   pageInfo: PageInfo!

@@ -1,15 +1,10 @@
 # import Order from "../order/schema.gql"
-type Vendor {
+type Vendor implements Node {
   id: ID
   name: String
   shop: Shop
   orders(first: Int, after: ID, last: Int, before: ID): OrderConnection
   orderWorkflow: Workflow
-}
-
-type Product {
-  id: ID
-  amount: Float
 }
 
 input VendorInput {

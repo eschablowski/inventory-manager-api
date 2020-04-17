@@ -1,30 +1,115 @@
-# import Query, Subscription from "base/schema.gql"
-# import Query, Mutation, Subscription from "document/schema.gql"
-# import Query, Mutation, Subscription from "item/schema.gql"
-# import Query, Mutation, Subscription from "order/schema.gql"
-# import Query, Mutation, Subscription from "product/schema.gql"
-# import Query, Mutation, Subscription from "shop/schema.gql"
-# import Query, Mutation, Subscription from "team/schema.gql"
-# import Query, Mutation, Subscription from "user/schema.gql"
-# import Query, Mutation, Subscription from "vendor/schema.gql"
-# import Query, Mutation, Subscription from "workflow/schema.gql"
+# import Query, Mutation, Subscription from "./base/schema.gql"
+# import Query, Mutation, Subscription from "./document/schema.gql"
+# import Query, Mutation, Subscription from "./item/schema.gql"
+# import Query, Mutation, Subscription from "./order/schema.gql"
+# import Query, Mutation, Subscription from "./product/schema.gql"
+# import Query, Mutation, Subscription from "./shop/schema.gql"
+# import Query, Mutation, Subscription from "./team/schema.gql"
+# import Query, Mutation, Subscription from "./user/schema.gql"
+# import Query, Mutation, Subscription from "./vendor/schema.gql"
+# import Query, Mutation, Subscription from "./workflow/schema.gql"
 
-# import Query, Mutation, Subscription from "server/schema.gql"
+# import Query, Mutation, Subscription from "./server/schema.gql"
 
+"""
+# Query
+
+The Query object holds all available fields to be queried, as per GraphQL convention.
+
+Example:
+```graphql
+query GraphQLVersion {
+  version
+}
+```
+"""
 type Query {
   """
   Gets the version of the GraphQL API.
   Is semver compatible, i.e. any version within the major should be interchangeable.
-  """
-  verison: String! @cacheControl(maxAge: 3600)
-}
 
-type Subscription {
+  Example: `0.0.1-pre-alpha`
+  """
   version: String! @cacheControl(maxAge: 3600)
 }
 
+
+"""
+# Mutation
+
+The Mutation object holds all available fields to be modified, as per GraphQL convention.
+
+Example:
+```graphql
+mutation CloseConnection {
+  close
+}
+```
+"""
+type Mutation {
+  """
+  Closes the current connection, used to quickly eliminate all resources from subscription handling, not required to be called.
+  """
+  close: Boolean
+}
+
+"""
+# Subscription
+
+The Subscription object holds all available fields capable of being listened on.
+
+> Uses WebSockets for communication.
+
+> See [Apollo Specification](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) for more information.
+
+Example:
+```graphql
+subscription VersionListener {
+  version
+}
+```
+"""
+type Subscription {
+  """
+  Listens for version changes in the GraphQL API.
+  """
+  version: String! @cacheControl(maxAge: 3600)
+}
+
+# Used to specify all Types holding the Query, Mutation, Subscripton fields.
+# Specified for stricter, or minimalistic, GraphQL parsers, as well as compatibility.
 schema {
   query: Query
   mutation: Mutation,
   subscription: Subscription
 }
+
+
+"""
+Used to specify whether the cached value should be private (local to that session), or public (globally accessible).
+"""
+enum CacheScope {
+  """
+  The cached value is globally accessible.
+  """
+  PUBLIC
+  """
+  The cached value is local to the session
+  """
+  PRIVATE
+}
+
+
+"""
+Controls server and client side caching policies.
+"""
+directive @cacheControl(
+  """
+  Specifies the maximum age that this value should be cached for in seconds
+  """
+  maxAge: Int
+  """
+  Specifies the scope of the cached value.
+  """
+  scope: CacheScope
+) on FIELD_DEFINITION | ENUM_VALUE

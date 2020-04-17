@@ -1,7 +1,7 @@
 # import Node, PageInfo, Edge, Operations from "../base/schema.gql"
 # import Capabilities from "./capabilities.gql"
 
-type Server {
+type Server implements Node {
   """
   An UUIDv4 generated at server initialization, can be used to query if you got reconnected or the server crashed.
   """
@@ -111,14 +111,14 @@ type Memory {
 }
 
 type ServerEdge implements Edge {
-  node: Server
-  cursor: ID
+  node: Server!
+  cursor: ID!
 }
 
 type ServerConnection implements Connection {
   pageInfo: PageInfo!
   edges: [ServerEdge]
-  totalCount: Int
+  totalCount: Int!
   servers: [Server]
 }
 
