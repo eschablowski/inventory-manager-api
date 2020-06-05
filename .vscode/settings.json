@@ -1,5 +1,5 @@
 {
-  "typescript.tsdk": ".vscode/pnpify/typescript/lib",
+  "typescript.tsdk": "node_modules/typescript/lib",
   "yaml.customTags": [
     "!import scalar",
     "!import-raw scalar",
