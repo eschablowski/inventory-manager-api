@@ -1,9 +1,9 @@
-import { loadSchema, loadTypedefs } from "@graphql-toolkit/core";
+import { loadTypedefs } from "@graphql-tools/core";
 import * as webpack from "webpack";
 import WebpackLoader from "./webpack-loader";
 import { printSchema, GraphQLSchema, print } from "graphql";
 import { dirname } from "path";
-import { mergeTypeDefs } from "@graphql-toolkit/schema-merging";
+import { mergeTypeDefs } from "@graphql-tools/merge";
 
 export default async function (
   this: webpack.loader.LoaderContext,

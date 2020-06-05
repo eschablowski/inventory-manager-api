@@ -5,7 +5,7 @@ import {
   SchemaPointerSingle,
   parseGraphQLSDL,
   SingleFileOptions,
-} from "@graphql-toolkit/common";
+} from "@graphql-tools/utils";
 
 import { loader as webpackLoader } from "webpack";
 import { promisify } from "util";

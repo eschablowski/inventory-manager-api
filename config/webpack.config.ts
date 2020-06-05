@@ -38,10 +38,7 @@ const config: webpack.Configuration = {
         exclude: /node_modules/,
         use: [
           {
-            loader: "file-loader",
-            options: {
-              name: "[name].[ext]",
-            },
+            loader: "graphql-tag/loader",
           },
           {
             loader: require.resolve("./graphql-loader"),
@@ -56,10 +53,10 @@ const config: webpack.Configuration = {
         test: /\.ya?ml$/,
         use: [
           {
-            loader: "file-loader",
-            options: { name: "[name].json" },
+            loader: "json-loader",
           },
           {
+            // test: /openapi/,
             loader: require.resolve("./json-merge-loader"),
           },
           {
