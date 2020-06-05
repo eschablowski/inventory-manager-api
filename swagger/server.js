@@ -1,13 +1,11 @@
 const express = require("express");
 const { initialize } = require("express-openapi");
-const apiDoc = require("../build/openapi3.json");
+const { default: apiDoc } = require("../build/openapi3.js");
 const swaggerUi = require("swagger-ui-express");
 const examples = require("./examples");
 const openBrowser = require("open");
 
 const app = express();
-
-console.log(apiDoc);
 
 initialize({
   app,
