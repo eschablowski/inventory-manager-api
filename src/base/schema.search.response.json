@@ -8,7 +8,7 @@
         "results": {
             "type": "array",
             "items": {
-                "$ref": "./schema.node.json"
+                "$ref": "./schema.search.json"
             }
         },
         "last": {

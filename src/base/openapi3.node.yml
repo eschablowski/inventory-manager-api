@@ -59,6 +59,27 @@ components:
           url: //downloads.{{ host }}/document/00000000-0000-0000-0000-000000000000/raw
           renderedUrl: //downloads.{{ host }}/document/00000000-0000-0000-0000-000000000000/rendered
   schemas:
-    Node: !import-schema
-      loc: Node
-      file: ./schema.node.json
+    Node:
+      title: Node
+      description: |
+        # Node
+
+        A node is 
+      type: object
+      properties:
+        id:
+          title: ID
+          description: |
+            # ID
+
+            The unique ID for this node
+          nullable: false
+          type: string
+          format: byte
+          minLength: 12
+          maxLength: 12
+          externalDocs:
+            description: ID specification
+            url: https://github.com/eschablowski/inventory-manager-api/blob/master/specifications/id/Generation.md
+      required:
+        - id

@@ -1,6 +1,5 @@
 import { inspect } from "util";
 import xml from "xml";
-import sequelize, { Op } from "sequelize";
 
 type Primitive = number | string | boolean | null;
 
@@ -71,26 +70,14 @@ export class Search implements ISearch {
   toJSON(pretty: string): string {
     return JSON.stringify(this, undefined, pretty);
   }
-  toSequelize(): sequelize.WhereOperators {
-    return this._toSequelize(this);
+  toString(): string {
+    return this.toJSON("\t");
   }
-  private _toSequelize(value: any): any {
-    if (Search.isSearch(value)) {
-      return Object.fromEntries(
-        Object.entries(value).map(([key, value]: [string, any]) => {
-          if (key in Search.operations) key = Search.operations[key];
-          value = this._toSequelize(value);
-
-          return [key, value];
-        })
-      );
-    } else if (Array.isArray(value)) {
-      return value.map((value) => {
-        this._toSequelize(value);
-      });
-    } else {
-      return value;
+  [Symbol.toPrimitive](hint: "number" | "string" | "default"): string {
+    if(hint === "number"){
+      throw new TypeError("Cannot convert Search to number");
     }
+    return this.toString();
   }
   static isISearch(
     potentialSearch: any,
@@ -161,24 +148,7 @@ export class Search implements ISearch {
       typeof potentialSearch === "object" &&
       !Array.isArray(potentialSearch) &&
       "toJSON" in potentialSearch &&
-      "toXML" in potentialSearch &&
-      "toSequelize" in potentialSearch
+      "toXML" in potentialSearch
     ); // The vast diversity of Search Queries makes this almost impossible to truly determine
   }
-  private static readonly operations = Object.freeze({
-    $and: Op.and,
-    $or: Op.or,
-    $gt: Op.gt,
-    gte: Op.gte,
-    $lt: Op.lt,
-    $lte: Op.lte,
-    $eq: Op.eq,
-    $not: Op.not,
-    $between: Op.between,
-    $like: Op.like,
-    $startsWith: Op.startsWith,
-    $endsWith: Op.endsWith,
-    $substring: Op.substring,
-    $in: Op.in,
-  });
 }

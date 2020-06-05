@@ -33,7 +33,9 @@ type NodeEdge implements Edge {
   """
   # Cursor
 
-  Cursors are comprised of `${node.id}:${ascending?}:${order column}`
+  Cursors are comprised of `node.id:ascending?:order column`
+
+  Example: `AAHKxTKuws7/1JHk:1:name` would be for team AAHKxTKuws7/1JHk ordered by the name column in an ascending order.
 
   > Cursors are used in index-based pagination.
   """
@@ -41,9 +43,9 @@ type NodeEdge implements Edge {
 }
 
 """
-A connection to a list of Nodes.
+# Node Connection
 
-Useful for pagination.
+Node connections are used to paginate through a list of nodes without loading all IDs.
 """
 type NodeConnection implements Connection {
   """
@@ -101,7 +103,11 @@ interface Edge {
   """
   node: Node
   """
-  A cursor for use in pagination
+  # Cursor
+
+  Cursors are comprised of `${node.id}:${ascending?}:${order column}`
+
+  > Cursors are used in index-based pagination.
   """
   cursor: ID @cacheControl(maxAge: 30, scope: PUBLIC)
 }
@@ -241,19 +247,36 @@ input NodeInput {
 extend type Query {
   """
   Gets a node by its id.
+
+  Only Useful for querying fragments of an node, to query information about a node, please utilize `Query.id(id: $id)`.
   """
-  node(id: ID!): Node
+  node(
+    """
+    The `id` of the node to Query.
+    """
+    id: ID!
+  ): Node
   """
   Gets multiple nodes by their ids, or a query.
   Supports pagination.
   """
   nodes(
+    """
+    The `id`s of the nodes to return.
+
+    > Mutually exclusive with the `search` parameter.
+    """
     ids: [ID!]
+    """
+    A Query String
+    """
     search: NodeInput
     first: Int
     after: ID
     last: Int
     before: ID
+    sort: String = "id"
+    ascending: Boolean = True
   ): NodeConnection
 }
 
@@ -284,7 +307,7 @@ extend type Subscription {
     ids: [ID!]
     """
     A Search pattern for nodes to subscribe to.
-    > If a new node is created, and listening for CREATE operations, the new 
+    > If a new node is created, and listening for CREATE operations, the new
     """
     search: NodeInput
     first: Int

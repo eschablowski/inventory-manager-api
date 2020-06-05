@@ -1,8 +1,8 @@
 export const search = {
-    "application/json": {
-        "Basic Search": require("./search.json")
-    },
-    "application/xml":{
-        "Basic Search": require("./search.xml")
-    }
-}
+  "application/json": {
+    "Basic Search": JSON.stringify(require("./search.json"), undefined, 4),
+  },
+  "application/xml": {
+    "Basic Search": require("!!raw-loader!./search.xml") as string,
+  },
+};

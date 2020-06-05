@@ -166,9 +166,35 @@ components:
     Search:
       $ref: "#/components/schemas/Search"
   schemas:
-    Search: !import-schema
-      file: ./schema.search.json
-      loc: Search
-    Nodes: !import-schema
-      file: ./schema.search.response.json
-      loc: Nodes
+    # Search:
+
+    Nodes:
+      type: object
+      properties:
+        results:
+          type: array
+          title: Results
+          description: |
+            The results of the query
+          items:
+            $ref: "#/components/schemas/Node/properties/id"
+          xml:
+            wrapped: true
+            name: Results
+        last:
+          type: boolean
+          title: Last Page
+          description: |
+            Defines whether there is more data to load
+          default: false
+          xml:
+            attribute: true
+        total:
+          type: integer
+          format: int64
+          title: Total Records Found
+          description: |
+            The total number of Records matching the search parameters
+          xml:
+            attribute: true
+

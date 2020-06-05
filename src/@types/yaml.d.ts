@@ -1,4 +1,4 @@
 declare module "*.yml" {
-  const doc: string;
+  const doc: any;
   export default doc;
 }
